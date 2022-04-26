@@ -1,5 +1,5 @@
 //State Machine
-package main
+package Pen_Game_State_Machine
 
 import (
 	"fmt"
