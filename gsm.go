@@ -67,14 +67,14 @@ func (g *Game_State_Machine_t) Update(screen *ebiten.Image) error {
 
 	switch res.code {
 	case Game_State_result_change:
-		g.State_Change(screen, res.next_State)
+		g.State_Change(res.next_State)
 	case Game_State_result_add:
-		g.State_Add(screen, res.next_State)
+		g.State_Add(res.next_State)
 	case Game_State_result_delete:
 		g.Game_State = g.Game_State[0 : len(g.Game_State)-1]
 	case Game_State_result_all_delete_and_change:
 		g.Game_State = []Game_State_t{}
-		g.State_Add(screen, res.next_State)
+		g.State_Add(res.next_State)
 	case Game_State_result_insert_back:
 		res.next_State.Init(len(g.Game_State)-1, g.deltaTime)
 		index := len(g.Game_State) - 2
@@ -128,7 +128,7 @@ func (g *Game_State_Machine_t) Debug_Log_print() {
 	fmt.Printf("\n")
 }
 
-func (g *Game_t) Layout(outsideWidth, outsideHeight int) (int, int) {
+func (g *Game_State_Machine_t) Layout(outsideWidth, outsideHeight int) (int, int) {
 	return g.Layout_Width, g.Layout_Height
 }
 
