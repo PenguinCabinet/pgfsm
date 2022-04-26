@@ -39,7 +39,6 @@ var Game_State_result_map map[string]Game_State_result_code_t = map[string]Game_
 type Game_State_result_t struct {
 	code       Game_State_result_code_t
 	next_State Game_State_t
-	Layout_Width, Layout_Height int
 }
 
 type Game_State_t interface {
@@ -52,6 +51,7 @@ type Game_State_Machine_t struct {
 	Game_State             []Game_State_t
 	deltaTime              float64
 	old_time_for_deltaTime int64
+	Layout_Width, Layout_Height int
 }
 
 func (g *Game_State_Machine_t) Update(screen *ebiten.Image) error {
