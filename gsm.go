@@ -110,12 +110,12 @@ func (g *Game_State_Machine_t) Empty() bool {
 	return len(g.Game_State) == 0
 }
 
-func (g *Game_State_Machine_t) State_Add(screen *ebiten.Image, v Game_State_t) {
+func (g *Game_State_Machine_t) State_Add( v Game_State_t) {
 	g.Game_State = append(g.Game_State, v)
 	v.Init(len(g.Game_State)-1, g.deltaTime)
 }
 
-func (g *Game_State_Machine_t) State_Change(screen *ebiten.Image, v Game_State_t) {
+func (g *Game_State_Machine_t) State_Change( v Game_State_t) {
 	g.Game_State[len(g.Game_State)-1] = v
 	v.Init(len(g.Game_State)-1, g.deltaTime)
 }
