@@ -39,6 +39,7 @@ var Game_State_result_map map[string]Game_State_result_code_t = map[string]Game_
 type Game_State_result_t struct {
 	code       Game_State_result_code_t
 	next_State Game_State_t
+	Layout_Width, Layout_Height int
 }
 
 type Game_State_t interface {
@@ -125,6 +126,10 @@ func (g *Game_State_Machine_t) Debug_Log_print() {
 		fmt.Printf("%d %+v\n", i, e)
 	}
 	fmt.Printf("\n")
+}
+
+func (g *Game_t) Layout(outsideWidth, outsideHeight int) (int, int) {
+	return g.Layout_Width, g.Layout_Height
 }
 
 func (g *Game_State_Machine_t) Init() {
