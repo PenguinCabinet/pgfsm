@@ -6,8 +6,8 @@ This is the stack machine library for [Ebiten](https://ebiten.org/).
 * The state and stack machine for the game programming
 * The deltatime between the previous frame and the current frame.
 
-# ドキュメント
-[Tutorial](doc/Tutorial_en.md)
+# Documents
+~~[Tutorial](doc/Tutorial_en.md)~~ We are making it...  
 
 # Quick start
 
