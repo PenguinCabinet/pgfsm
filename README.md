@@ -1,3 +1,4 @@
+[README of ENGLISH](./README_en.md)
 # Pen_Game_State_Machine
 
 これは[GoのゲームライブラリEbiten用](https://ebiten.org/)のステートマシンライブラリです。
@@ -7,8 +8,6 @@
 
 # ドキュメント
 [チュートリアル(JP)](doc/Tutorial.md)
-
-~~Tutorial(EN)~~ 準備中
 
 # Quick start
 
