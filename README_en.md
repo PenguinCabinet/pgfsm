@@ -1,3 +1,4 @@
+[README of JAPANESE](./README.md)
 # Pen_Game_State_Machine
 
 This is the stack machine library for [Ebiten](https://ebiten.org/).
