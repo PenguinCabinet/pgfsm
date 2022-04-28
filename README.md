@@ -8,7 +8,7 @@
 # ドキュメント
 [チュートリアル(JP)](doc/Tutorial.md)
 
-~~Tutorial(EN)~~準備中
+~~Tutorial(EN)~~ 準備中
 
 # Quick start
 
