@@ -38,7 +38,7 @@ go get golang.org/x/image/font/opentype
 # タイトル画面の作成
 
 まずタイトル画面を作ってみましょう。  
-タイトル画面やゲームオーバー画面などはステートとして作成します。  
+タイトル画面やゲーム画面などはステートとして作成します。  
 
 ```go
 package main
@@ -117,7 +117,7 @@ func main() {
 
 	Title_sm := new(Title_Game_State_t)
 
-	/*スタックにmy_smを追加します*/
+	/*スタックにタイトル画面のステートを追加します*/
 	gms.State_Add(Title_sm)
 
 	if err := ebiten.RunGame(gms); err != nil {
@@ -125,13 +125,13 @@ func main() {
 	}
 }
 ```
-実行結果
+実行結果  
 ![img1](image/img1.png)
 
 ソースコードにコメントを記述しておきました。  
 ステートはPen_Game_State_Machine.Game_State_tというinterfaceで仕様が決まっていて、それに基づいて実装します。  
 今回はTitle_Game_State_tとしてタイトル画面のステートを実装しています。
-```go:
+```go
 type Game_State_t interface {
 	Init(int, float64)
 	Update(*ebiten.Image, int, float64) Game_State_result_t
@@ -289,7 +289,7 @@ func main() {
 
 	Title_sm := new(Title_Game_State_t)
 
-	/*スタックにmy_smを追加します*/
+	/*スタックにタイトル画面のステートを追加します*/
 	gms.State_Add(Title_sm)
 
 	if err := ebiten.RunGame(gms); err != nil {
@@ -529,7 +529,7 @@ func main() {
 
 	Title_sm := new(Title_Game_State_t)
 
-	/*スタックにmy_smを追加します*/
+	/*スタックにタイトル画面のステートを追加します*/
 	gms.State_Add(Title_sm)
 
 	if err := ebiten.RunGame(gms); err != nil {
