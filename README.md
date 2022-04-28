@@ -5,6 +5,11 @@
 * ゲームプログラミングのためのスタック型のステートマシン
 * 直前のフレームと今のフレーム間で経過した時間のdeltatime
 
+# ドキュメント
+[チュートリアル(JP)](doc/Tutorial.md)
+
+~~Tutorial(EN)~~準備中
+
 # Quick start
 
 ## インストール
@@ -13,5 +18,3 @@ go get https://github.com/PenguinCabinet/Pen_Game_State_Machine
 ```
 
 ## Example
-
-# ドキュメント
