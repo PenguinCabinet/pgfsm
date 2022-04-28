@@ -37,8 +37,8 @@ var Game_State_result_map map[string]Game_State_result_code_t = map[string]Game_
 }
 
 type Game_State_result_t struct {
-	code       Game_State_result_code_t
-	next_State Game_State_t
+	Code       Game_State_result_code_t
+	Next_State Game_State_t
 }
 
 type Game_State_t interface {
@@ -48,9 +48,9 @@ type Game_State_t interface {
 }
 
 type Game_State_Machine_t struct {
-	Game_State             []Game_State_t
-	deltaTime              float64
-	old_time_for_deltaTime int64
+	Game_State                  []Game_State_t
+	deltaTime                   float64
+	old_time_for_deltaTime      int64
 	Layout_Width, Layout_Height int
 }
 
@@ -65,34 +65,34 @@ func (g *Game_State_Machine_t) Update(screen *ebiten.Image) error {
 
 	res := g.Game_State[len(g.Game_State)-1].Update(screen, len(g.Game_State)-1, g.deltaTime)
 
-	switch res.code {
+	switch res.Code {
 	case Game_State_result_change:
-		g.State_Change(res.next_State)
+		g.State_Change(res.Next_State)
 	case Game_State_result_add:
-		g.State_Add(res.next_State)
+		g.State_Add(res.Next_State)
 	case Game_State_result_delete:
 		g.Game_State = g.Game_State[0 : len(g.Game_State)-1]
 	case Game_State_result_all_delete_and_change:
 		g.Game_State = []Game_State_t{}
-		g.State_Add(res.next_State)
+		g.State_Add(res.Next_State)
 	case Game_State_result_insert_back:
-		res.next_State.Init(len(g.Game_State)-1, g.deltaTime)
+		res.Next_State.Init(len(g.Game_State)-1, g.deltaTime)
 		index := len(g.Game_State) - 2
 		g.Game_State = append(g.Game_State[:index], g.Game_State[index:]...)
-		g.Game_State[index] = res.next_State
+		g.Game_State[index] = res.Next_State
 		/*
 			case Game_State_result_delete_and_insert_back:
 				g.Game_State = g.Game_State[0 : len(g.Game_State)-1]
 				index := len(g.Game_State) - 1
-				res.next_State.Init()
+				res.Next_State.Init()
 				g.Game_State = append(g.Game_State[:index+1], g.Game_State[index:]...)
-				g.Game_State[index] = res.next_State
+				g.Game_State[index] = res.Next_State
 
 			case Game_State_result_insert2_back:
-				res.next_State.Init()
+				res.Next_State.Init()
 				index := len(g.Game_State) - 2
 				g.Game_State = append(g.Game_State[:index], g.Game_State[index:]...)
-				g.Game_State[index] = res.next_State
+				g.Game_State[index] = res.Next_State
 		*/
 
 	}
@@ -111,12 +111,12 @@ func (g *Game_State_Machine_t) Empty() bool {
 	return len(g.Game_State) == 0
 }
 
-func (g *Game_State_Machine_t) State_Add( v Game_State_t) {
+func (g *Game_State_Machine_t) State_Add(v Game_State_t) {
 	g.Game_State = append(g.Game_State, v)
 	v.Init(len(g.Game_State)-1, g.deltaTime)
 }
 
-func (g *Game_State_Machine_t) State_Change( v Game_State_t) {
+func (g *Game_State_Machine_t) State_Change(v Game_State_t) {
 	g.Game_State[len(g.Game_State)-1] = v
 	v.Init(len(g.Game_State)-1, g.deltaTime)
 }
