@@ -1,5 +1,5 @@
 [README of JAPANESE](./README.md)
-# Pen_Game_State_Machine
+# The Pen Game Programing Finite State Machine
 
 This is the stack machine library for [Ebiten](https://ebiten.org/).
 ## Provide features
@@ -13,7 +13,7 @@ This is the stack machine library for [Ebiten](https://ebiten.org/).
 
 ## Install
 ```shell
-go get https://github.com/PenguinCabinet/Pen_Game_State_Machine
+go get https://github.com/PenguinCabinet/pgfsm
 ```
 
 ## Example
