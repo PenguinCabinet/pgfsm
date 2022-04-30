@@ -1,5 +1,5 @@
 [README of ENGLISH](./README_en.md)
-# Pen_Game_State_Machine
+# The Pen Game Programing Finite State Machine
 
 これは[GoのゲームライブラリEbiten用](https://ebiten.org/)のステートマシンライブラリです。
 ## 提供する機能
@@ -13,7 +13,7 @@
 
 ## インストール
 ```shell
-go get https://github.com/PenguinCabinet/Pen_Game_State_Machine
+go get https://github.com/PenguinCabinet/pgfsm
 ```
 
 ## Example
