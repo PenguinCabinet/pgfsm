@@ -1,3 +1,3 @@
-package Pen_Game_State_Machine
+package pgfsm
 
 func main() {}
