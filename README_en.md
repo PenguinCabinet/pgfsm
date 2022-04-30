@@ -1,7 +1,7 @@
 [README of JAPANESE](./README.md)
 # The Pen Game Programing Finite State Machine
 
-This is the stack machine library for [Ebiten](https://ebiten.org/).
+This is the state machine library for [Ebiten](https://ebiten.org/).
 ## Provide features
 * The state and stack machine for the game programming
 * The deltatime between the previous frame and the current frame.
