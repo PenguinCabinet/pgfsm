@@ -1,5 +1,5 @@
 # チュートリアル
-このチュートリアルでは、Pen_Game_State_Machineの使い方を学んでいきます  
+このチュートリアルでは、The Pen Game Programing Finite State Machineの使い方を学んでいきます  
 
 # 開発環境
 
@@ -26,7 +26,7 @@ go mod init tutorial
 
 Ebitenは依存関係になっているため、Pen_Game_State_Machineを入れるとEbitenも一緒にダウンロードされます。
 ```shell
-go get https://github.com/PenguinCabinet/Pen_Game_State_Machine
+go get github.com/PenguinCabinet/pgfsm
 ```
 
 このチュートリアルでは文字表示も使うため、フォント関連のライブラリも入れておきます。
@@ -47,7 +47,7 @@ import (
 	"image/color"
 	"log"
 
-	"github.com/PenguinCabinet/Pen_Game_State_Machine"
+	"github.com/PenguinCabinet/pgfsm"
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/examples/resources/fonts"
 	"github.com/hajimehoshi/ebiten/text"
@@ -92,11 +92,11 @@ func (sm *Title_Game_State_t) Init(
 func (sm *Title_Game_State_t) Update(
 	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
 	stack_deep int, delta float64,
-) Pen_Game_State_Machine.Game_State_result_t {
-	/*空のPen_Game_State_Machine.Game_State_result_tを返却することでループを継続します
-	Pen_Game_State_Machine.Game_State_result_tを書き換えることで、実行するものを新しいステートに変えたり
+) pgfsm.Result {
+	/*空のpgfsm.Resultを返却することでループを継続します
+	pgfsm.Resultを書き換えることで、実行するものを新しいステートに変えたり
 	新しいステートをスタックの上に乗せたりすることができます*/
-	return Pen_Game_State_Machine.Game_State_result_t{}
+	return pgfsm.Result{}
 }
 
 //これはマイフレーム呼び出される描写用の関数です
@@ -110,15 +110,15 @@ func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Pen_Game_State_Machine")
 
-	gms := new(Pen_Game_State_Machine.Game_State_Machine_t)
+	gms := new(pgfsm.Machine)
 
-	gms.Layout_Width = 640
-	gms.Layout_Height = 480
+	gms.LayoutWidth = 640
+	gms.LayoutHeight = 480
 
 	Title_sm := new(Title_Game_State_t)
 
 	/*スタックにタイトル画面のステートを追加します*/
-	gms.State_Add(Title_sm)
+	gms.StateAdd(Title_sm)
 
 	if err := ebiten.RunGame(gms); err != nil {
 		log.Fatal(err)
@@ -129,19 +129,19 @@ func main() {
 ![img1](image/img1.png)
 
 ソースコードにコメントを記述しておきました。  
-ステートはPen_Game_State_Machine.Game_State_tというinterfaceで仕様が決まっていて、それに基づいて実装します。  
+ステートはpgfsm.Stateというinterfaceで仕様が決まっていて、それに基づいて実装します。  
 今回はTitle_Game_State_tとしてタイトル画面のステートを実装しています。
 ```go
-type Game_State_t interface {
+type State interface {
 	Init(int, float64)
-	Update(*ebiten.Image, int, float64) Game_State_result_t
+	Update(*ebiten.Image, int, float64) Result
 	Draw(*ebiten.Image, int, float64)
 }
 ```
 
 また
 ```go
-    return Pen_Game_State_Machine.Game_State_result_t{}
+    return pgfsm.Result{}
 ```
 のところに注目してください。  
 このUpdateの戻り値を変えることによって、新しいステートに切り替えたり、新しいステートをスタック上に載せたりすることができます。  
@@ -158,7 +158,7 @@ import (
 	"image/color"
 	"log"
 
-	"github.com/PenguinCabinet/Pen_Game_State_Machine"
+	"github.com/PenguinCabinet/pgfsm"
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/examples/resources/fonts"
 	"github.com/hajimehoshi/ebiten/inpututil"
@@ -203,11 +203,11 @@ func (sm *Game_Main_State_t) Init(
 func (sm *Game_Main_State_t) Update(
 	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
 	stack_deep int, delta float64,
-) Pen_Game_State_Machine.Game_State_result_t {
-	/*空のPen_Game_State_Machine.Game_State_result_tを返却することでループを継続します
-	Pen_Game_State_Machine.Game_State_result_tを書き換えることで、実行するものを新しいステートに変えたり
+) pgfsm.Result {
+	/*空のpgfsm.Game_State_result_tを返却することでループを継続します
+	pgfsm.Game_State_result_tを書き換えることで、実行するものを新しいステートに変えたり
 	新しいステートをスタックの上に乗せたりすることができます*/
-	return Pen_Game_State_Machine.Game_State_result_t{}
+	return pgfsm.Result{}
 }
 
 //これはマイフレーム呼び出される描写用の関数です
@@ -252,23 +252,23 @@ func (sm *Title_Game_State_t) Init(
 func (sm *Title_Game_State_t) Update(
 	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
 	stack_deep int, delta float64,
-) Pen_Game_State_Machine.Game_State_result_t {
+) pgfsm.Result {
 
 	/*sキーが入力された場合*/
 	if inpututil.IsKeyJustPressed(ebiten.KeyS) {
 		/*ここでステートマシンを切り替えます
-		Pen_Game_State_Machine.Game_State_result_changeは現在実行しているステートを
+		pgfsm.CodeChangeは現在実行しているステートを
 		Next_Stateに切り替わります
 		ここでは現在実行中のタイトル画面のステートからゲーム画面のステートに切り替えています*/
-		return Pen_Game_State_Machine.Game_State_result_t{
-			Code:       Pen_Game_State_Machine.Game_State_result_change,
-			Next_State: new(Game_Main_State_t),
+		return pgfsm.Result{
+			Code:       pgfsm.CodeChange,
+			NextState: new(Game_Main_State_t),
 		}
 	}
-	/*空のPen_Game_State_Machine.Game_State_result_tを返却することでループを継続します
-	Pen_Game_State_Machine.Game_State_result_tを書き換えることで、実行するものを新しいステートに変えたり
+	/*空のpgfsm.Game_State_result_tを返却することでループを継続します
+	pgfsm.Game_State_result_tを書き換えることで、実行するものを新しいステートに変えたり
 	新しいステートをスタックの上に乗せたりすることができます*/
-	return Pen_Game_State_Machine.Game_State_result_t{}
+	return pgfsm.Result{}
 }
 
 //これはマイフレーム呼び出される描写用の関数です
@@ -282,15 +282,15 @@ func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Pen_Game_State_Machine")
 
-	gms := new(Pen_Game_State_Machine.Game_State_Machine_t)
+	gms := new(pgfsm.Machine)
 
-	gms.Layout_Width = 640
-	gms.Layout_Height = 480
+	gms.LayoutWidth = 640
+	gms.LayoutHeight = 480
 
 	Title_sm := new(Title_Game_State_t)
 
 	/*スタックにタイトル画面のステートを追加します*/
-	gms.State_Add(Title_sm)
+	gms.StateAdd(Title_sm)
 
 	if err := ebiten.RunGame(gms); err != nil {
 		log.Fatal(err)
@@ -301,12 +301,12 @@ func main() {
 ![img1](image/img2.gif)  
 sキーを押すとタイトル画面からゲーム画面に切り替わります!(Gifはループにしてあるので、ゲーム画面からタイトル画面にも切り替わっているように見えますが、実際は切り替わりません)
 ```go
-		return Pen_Game_State_Machine.Game_State_result_t{
-			Code:       Pen_Game_State_Machine.Game_State_result_change,
-			Next_State: new(Game_Main_State_t),
+		return pgfsm.Result{
+			Code:       pgfsm.CodeChange,
+			NextState: new(Game_Main_State_t),
 		}
 ```
-みそはここで、戻り値のPen_Game_State_Machine.Game_State_result_tを変えることでステートを切り替えることができるのです。
+みそはここで、戻り値のpgfsm.Resultを変えることでステートを切り替えることができるのです。
 
 # マップ画面の実装
 タイトル画面とゲーム画面が完成しました。  
@@ -323,7 +323,7 @@ import (
 	"image/color"
 	"log"
 
-	"github.com/PenguinCabinet/Pen_Game_State_Machine"
+	"github.com/PenguinCabinet/pgfsm"
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/examples/resources/fonts"
 	"github.com/hajimehoshi/ebiten/inpututil"
@@ -368,7 +368,7 @@ func (sm *Menu_Game_State_t) Init(
 func (sm *Menu_Game_State_t) Update(
 	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
 	stack_deep int, delta float64,
-) Pen_Game_State_Machine.Game_State_result_t {
+) pgfsm.Result {
 
 	/*mキーが入力された場合 メニューを閉じる*/
 	if inpututil.IsKeyJustPressed(ebiten.KeyM) {
@@ -376,15 +376,15 @@ func (sm *Menu_Game_State_t) Update(
 		「ゲーム画面、メニュー画面」の順でスタックにストックされているので、消去するとスタックの中身は
 		「ゲーム画面」となってゲーム画面に戻ります
 		*/
-		return Pen_Game_State_Machine.Game_State_result_t{
-			Code:       Pen_Game_State_Machine.Game_State_result_delete,
-			Next_State: nil,
+		return pgfsm.Result{
+			Code:       pgfsm.CodeDelete,
+			NextState: nil,
 		}
 	}
-	/*空のPen_Game_State_Machine.Game_State_result_tを返却することでループを継続します
-	Pen_Game_State_Machine.Game_State_result_tを書き換えることで、実行するものを新しいステートに変えたり
+	/*空のpgfsm.Resultを返却することでループを継続します
+	pgfsm.Resultを書き換えることで、実行するものを新しいステートに変えたり
 	新しいステートをスタックの上に乗せたりすることができます*/
-	return Pen_Game_State_Machine.Game_State_result_t{}
+	return pgfsm.Result{}
 }
 
 //これはマイフレーム呼び出される描写用の関数です
@@ -430,23 +430,23 @@ func (sm *Game_Main_State_t) Init(
 func (sm *Game_Main_State_t) Update(
 	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
 	stack_deep int, delta float64,
-) Pen_Game_State_Machine.Game_State_result_t {
+) pgfsm.Result {
 	/*mキーが入力された場合 メニューを開く*/
 	if inpututil.IsKeyJustPressed(ebiten.KeyM) {
 		/*ここで現在実行しているゲーム画面の上にメニュー画面のステートをのせます
 		「ゲーム画面」の順でスタックにストックされているので、追加するとスタックの中身は
 		「ゲーム画面、メニュー画面」となってメニュー画面の処理に移ります
 		*/
-		return Pen_Game_State_Machine.Game_State_result_t{
-			Code:       Pen_Game_State_Machine.Game_State_result_add,
-			Next_State: new(Menu_Game_State_t),
+		return pgfsm.Result{
+			Code:       pgfsm.CodeAdd,
+			NextState: new(Menu_Game_State_t),
 		}
 	}
 
-	/*空のPen_Game_State_Machine.Game_State_result_tを返却することでループを継続します
-	Pen_Game_State_Machine.Game_State_result_tを書き換えることで、実行するものを新しいステートに変えたり
+	/*空のpgfsm.Resultを返却することでループを継続します
+	pgfsm.Resultを書き換えることで、実行するものを新しいステートに変えたり
 	新しいステートをスタックの上に乗せたりすることができます*/
-	return Pen_Game_State_Machine.Game_State_result_t{}
+	return pgfsm.Result{}
 }
 
 //これはマイフレーム呼び出される描写用の関数です
@@ -492,23 +492,23 @@ func (sm *Title_Game_State_t) Init(
 func (sm *Title_Game_State_t) Update(
 	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
 	stack_deep int, delta float64,
-) Pen_Game_State_Machine.Game_State_result_t {
+) pgfsm.Result {
 
 	/*sキーが入力された場合*/
 	if inpututil.IsKeyJustPressed(ebiten.KeyS) {
 		/*ここでステートマシンを切り替えます
-		Pen_Game_State_Machine.Game_State_result_changeは現在実行しているステートを
+		pgfsm.Game_State_result_changeは現在実行しているステートを
 		Next_Stateに切り替わります
 		ここでは現在実行中のタイトル画面のステートからゲーム画面のステートに切り替えています*/
-		return Pen_Game_State_Machine.Game_State_result_t{
-			Code:       Pen_Game_State_Machine.Game_State_result_change,
-			Next_State: new(Game_Main_State_t),
+		return pgfsm.Result{
+			Code:       pgfsm.CodeChange,
+			NextState: new(Game_Main_State_t),
 		}
 	}
-	/*空のPen_Game_State_Machine.Game_State_result_tを返却することでループを継続します
-	Pen_Game_State_Machine.Game_State_result_tを書き換えることで、実行するものを新しいステートに変えたり
+	/*空のpgfsm.Resultを返却することでループを継続します
+	pgfsm.Resultを書き換えることで、実行するものを新しいステートに変えたり
 	新しいステートをスタックの上に乗せたりすることができます*/
-	return Pen_Game_State_Machine.Game_State_result_t{}
+	return pgfsm.Result{}
 }
 
 //これはマイフレーム呼び出される描写用の関数です
@@ -522,15 +522,15 @@ func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Pen_Game_State_Machine")
 
-	gms := new(Pen_Game_State_Machine.Game_State_Machine_t)
+	gms := new(pgfsm.Machine)
 
-	gms.Layout_Width = 640
-	gms.Layout_Height = 480
+	gms.LayoutWidth = 640
+	gms.LayoutHeight = 480
 
 	Title_sm := new(Title_Game_State_t)
 
 	/*スタックにタイトル画面のステートを追加します*/
-	gms.State_Add(Title_sm)
+	gms.StateAdd(Title_sm)
 
 	if err := ebiten.RunGame(gms); err != nil {
 		log.Fatal(err)
