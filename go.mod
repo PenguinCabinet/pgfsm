@@ -1,4 +1,4 @@
-module github.com/PenguinCabinet/Pen_Game_State_Machine
+module github.com/PenguinCabinet/pgfsm
 
 go 1.17
 
