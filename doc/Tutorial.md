@@ -24,7 +24,7 @@ go mod init tutorial
 
 # ライブラリのインストール
 
-Ebitenは依存関係になっているため、Pen_Game_State_Machineを入れるとEbitenも一緒にダウンロードされます。
+Ebitenは依存関係になっているため、The Pen Game Programing Finite State Machineを入れるとEbitenも一緒にダウンロードされます。
 ```shell
 go get github.com/PenguinCabinet/pgfsm
 ```
