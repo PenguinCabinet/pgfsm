@@ -7,7 +7,7 @@ This is the state machine library for [Ebiten](https://ebiten.org/).
 * The deltatime between the previous frame and the current frame.
 
 # Documents
-~~[Tutorial](doc/Tutorial_en.md)~~ We are making it...  
+~~[Tutorial](doc/Tutorial_en.md)~~ We are making it...      
 [pkg.go.dev](https://pkg.go.dev/github.com/PenguinCabinet/pgfsm)
 
 # Quick start

@@ -7,7 +7,7 @@
 * 直前のフレームと今のフレーム間で経過した時間のdeltatime
 
 # ドキュメント
-[チュートリアル(JP)](doc/Tutorial.md)
+[チュートリアル(JP)](doc/Tutorial.md)   
 [pkg.go.dev](https://pkg.go.dev/github.com/PenguinCabinet/pgfsm)
 
 # Quick start
