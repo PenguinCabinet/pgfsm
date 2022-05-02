@@ -8,6 +8,7 @@
 
 # ドキュメント
 [チュートリアル(JP)](doc/Tutorial.md)
+[pkg.go.dev](https://pkg.go.dev/github.com/PenguinCabinet/pgfsm)
 
 # Quick start
 
