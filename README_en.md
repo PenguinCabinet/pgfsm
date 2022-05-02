@@ -14,7 +14,7 @@ This is the state machine library for [Ebiten](https://ebiten.org/).
 
 ## Install
 ```shell
-go get https://github.com/PenguinCabinet/pgfsm
+go get github.com/PenguinCabinet/pgfsm
 ```
 
 ## Example

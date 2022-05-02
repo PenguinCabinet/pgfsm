@@ -14,7 +14,7 @@
 
 ## インストール
 ```shell
-go get https://github.com/PenguinCabinet/pgfsm
+go get github.com/PenguinCabinet/pgfsm
 ```
 
 ## Example
