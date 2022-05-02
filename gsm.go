@@ -1,4 +1,8 @@
-//State Machine
+/*
+This is the state machine library for Ebiten.
+
+これはGoのゲームライブラリEbiten用のステートマシンライブラリです。
+*/
 package pgfsm
 
 import (
@@ -8,53 +12,99 @@ import (
 	"github.com/hajimehoshi/ebiten"
 )
 
+/*
+The type of values for the type of operations the stack.
+
+If its value is changed, In example,
+
+Do nothing and continue.
+Change the current running state to NextState.
+Add NextState on the current running state in the stack...etc.
+
+You can operate the stack.
+
+
+これは現在実行中のステートから返される、スタックを操作する種類を決めるための変数型です
+
+この値を変えると、例えば、
+
+何もせずそのまま処理実行。
+現在実行しているStateとNextStateを入れ替える。
+現在スタックに乗っているStateをすべて消去して、NextStateを乗せる。
+
+とスタックを操作することができます。
+*/
 type Code int
 
 const (
-	CodeNil                Code = iota //何もせずそのまま処理実行
-	CodeChange                         //現在実行しているStateとnext_Stateを入れ替える
-	CodeAdd                            //現在実行しているStateの上にnext_Stateを乗せる
-	CodeDelete                         //現在実行しているStateを消去する
-	CodeAllDeleteAndChange             //現在スタックに乗っているStateをすべて消去して、next_Stateを乗せる
-	CodeInsertBack                     //現在実行しているStateの後ろに、next_Stateを挿入する
-	/*
-		GameState_result_delete_and_insert_back                                 //現在実行しているStateの後ろに、next_Stateを挿入する
-		GameState_result_insert2_back
-	*/
+	/*Do nothing and continue
+	何もせずそのまま処理実行*/
+	CodeNil Code = iota
+
+	/*Change the current running state to NextState
+	現在実行しているStateとNextStateを入れ替える*/
+	CodeChange
+
+	/*Add NextState on the current running state in the stack
+	現在実行しているStateの上にNextStateを乗せる*/
+	CodeAdd
+
+	/*Delete the current running state
+	現在実行しているStateを消去する*/
+	CodeDelete
+
+	/*Delete all states in the stack and add NextState in the stack.
+	現在スタックに乗っているStateをすべて消去して、NextStateを乗せる*/
+	CodeAllDeleteAndChange
+
+	/*Insert NextState behiend the current running state
+	現在実行しているStateの後ろに、NextStateを挿入する*/
+	CodeInsertBack
 )
 
 /*
-var GameState_result_map map[string]GameState_result_code_t = map[string]GameState_result_code_t{
-	"GameState_result_nil":                   GameState_result_nil,
-	"GameState_result_change":                GameState_result_change,
-	"GameState_result_add":                   GameState_result_add,
-	"GameState_result_delete":                GameState_result_delete,
-	"GameState_result_all_delete_and_change": GameState_result_all_delete_and_change,
-	"GameState_result_insert_back":           GameState_result_insert_back,
-	/*
-		"GameState_result_delete_and_insert_back": GameState_result_delete_and_insert_back,
-		"GameState_result_insert2_back":           GameState_result_insert2_back,
-}
-*/
+The type of values for operations the stack.
+If it is needed,set NextState.
 
+これは現在実行中のステートから返される、スタックを操作するための変数型です
+必要ならば、NextStateに値を入れてください
+*/
 type Result struct {
 	Code      Code
 	NextState State
 }
 
+/*
+The interface of state.
+
+ステートのインターフェース
+*/
 type State interface {
 	Init(int, float64)
 	Update(*ebiten.Image, int, float64) Result
 	Draw(*ebiten.Image, int, float64)
 }
 
+/*
+The struct of the stack and state machine.
+
+ステートスタックマシーンの構造体です
+*/
 type Machine struct {
-	StateStack                []State
-	deltaTime                 float64
-	oldTimeForDeltaTime       int64
+	StateStack          []State
+	deltaTime           float64
+	oldTimeForDeltaTime int64
+
+	/*Please set the window size here.
+	It is used in the layout function for Ebiten
+	Windowのサイズを入れてください。
+	Ebiten用のレイアウト関数で使用されます*/
 	LayoutWidth, LayoutHeight int
 }
 
+/*This is the function for processing that is called in every frames.It is used internally.
+
+これは処理のため毎フレーク呼び出される関数です。内部的にEbitenで使います*/
 func (g *Machine) Update(screen *ebiten.Image) error {
 	newTimeForDeltaTime := time.Now().UnixNano()
 	g.deltaTime = float64(newTimeForDeltaTime-g.oldTimeForDeltaTime) * 0.001
@@ -81,47 +131,47 @@ func (g *Machine) Update(screen *ebiten.Image) error {
 		index := len(g.StateStack) - 2
 		g.StateStack = append(g.StateStack[:index], g.StateStack[index:]...)
 		g.StateStack[index] = res.NextState
-		/*
-			case State_result_delete_and_insert_back:
-				g.State = g.State[0 : len(g.State)-1]
-				index := len(g.State) - 1
-				res.Next_State.Init()
-				g.State = append(g.State[:index+1], g.State[index:]...)
-				g.State[index] = res.Next_State
-
-			case State_result_insert2_back:
-				res.Next_State.Init()
-				index := len(g.State) - 2
-				g.State = append(g.State[:index], g.State[index:]...)
-				g.State[index] = res.Next_State
-		*/
 
 	}
 
 	return nil
 }
 
+/*This is the function for drawing that is called in every frames.It is used internally.
+
+これは描写のため毎フレーク呼び出される関数です。内部的にEbitenで使います*/
 func (g *Machine) Draw(screen *ebiten.Image) {
 	for d, e := range g.StateStack {
 		e.Draw(screen, d, g.deltaTime)
 	}
-	//ebitenutil.DebugPrint(screen, "Hello, World!")
 }
 
+/*This returns true if the stack is empty, false otherwise
+
+stackが空ならtrueを返し、それ以外ならfalseを返します*/
 func (g *Machine) Empty() bool {
 	return len(g.StateStack) == 0
 }
 
+/*This add argument v to the stack
+
+stackに引数vを追加します*/
 func (g *Machine) StateAdd(v State) {
 	g.StateStack = append(g.StateStack, v)
 	v.Init(len(g.StateStack)-1, g.deltaTime)
 }
 
+/*This changes the current running state in the stack to the argument v
+
+実行中のステートを引数vに変更します*/
 func (g *Machine) StateChange(v State) {
 	g.StateStack[len(g.StateStack)-1] = v
 	v.Init(len(g.StateStack)-1, g.deltaTime)
 }
 
+/*The function for debugging.It displays the all states of the stack on the console.
+
+デバッグ用の関数です。コンソールにスタック内のステートをすべて表示します*/
 func (g *Machine) DebugLogprint() {
 	for i, e := range g.StateStack {
 		fmt.Printf("%d %+v\n", i, e)
@@ -129,10 +179,14 @@ func (g *Machine) DebugLogprint() {
 	fmt.Printf("\n")
 }
 
+/*This is the function for Ebiten.It is used internally.
+内部的にEbitenで使います*/
 func (g *Machine) Layout(outsideWidth, outsideHeight int) (int, int) {
 	return g.LayoutWidth, g.LayoutHeight
 }
 
+/*This is the function for Ebiten.It is used internally.
+内部的にEbitenで使います*/
 func (g *Machine) Init() {
 	g.oldTimeForDeltaTime = time.Now().UnixNano()
 }
