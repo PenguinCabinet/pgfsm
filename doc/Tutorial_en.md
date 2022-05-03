@@ -144,7 +144,7 @@ Also
 ```go
     return pgfsm.Result{}
 ```
-Please note this.
+Please note this.   
 By changing the return value of this Update, you can switch to a new state or put a new state on the stack. 
 
 # The game scene and switching between game scenes.
@@ -312,6 +312,7 @@ Here is essential,It is possible to switch states by changing the returned pgfsm
 The title scene and the game scene have been completed.  
 Next, let's implement putting the map scene and map scene on the stack.  
 Pressing the m key during the game scene opens the menu scene, and pressing the m key when the menu scene is open closes it.  
+
 Why can't we simply switch from the game scene to the menu scene?    
 That is because the game scene data is retained while the menu scene is open and   
 When the menu scene is closed, it is necessary to return to the game scene before opening.    
