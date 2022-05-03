@@ -128,8 +128,8 @@ func (g *Machine) Update(screen *ebiten.Image) error {
 		g.StateAdd(res.NextState)
 	case CodeInsertBack:
 		res.NextState.Init(len(g.StateStack)-1, g.deltaTime)
-		index := len(g.StateStack) - 2
-		g.StateStack = append(g.StateStack[:index], g.StateStack[index:]...)
+		index := len(g.StateStack) - 1
+		g.StateStack = append(g.StateStack[:index+1], g.StateStack[index:]...)
 		g.StateStack[index] = res.NextState
 
 	}
