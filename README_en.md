@@ -10,6 +10,11 @@ This is the state machine library for [Ebiten](https://ebiten.org/).
 * [Tutorial](doc/Tutorial_en.md) 
 * [pkg.go.dev](https://pkg.go.dev/github.com/PenguinCabinet/pgfsm)
 
+# Used by
+
+We are currently accepting games.   
+Could you tell me your games using this by issue.
+
 # Quick start
 
 ## Install
@@ -18,3 +23,58 @@ go get github.com/PenguinCabinet/pgfsm
 ```
 
 ## Example
+```go
+package main
+
+import (
+	"log"
+
+	"github.com/PenguinCabinet/pgfsm"
+	"github.com/hajimehoshi/ebiten"
+)
+
+type MyGameState struct {
+}
+
+func (sm *MyGameState) Init(
+	stack_deep int, /*The index of this state.*/
+	deltatime float64, /*The deltatime between the previous frame and the current frame.*/
+) {
+	//Init
+}
+
+func (sm *MyGameState) Update(
+	screen *ebiten.Image,
+	stack_deep int,
+	deltatime float64,
+) pgfsm.Result {
+	//Update
+	return pgfsm.Result{
+		Code:      pgfsm.CodeNil,
+		NextState: nil,
+	}
+}
+
+func (sm *MyGameState) Draw(screen *ebiten.Image, stack_deep int, deltatime float64) {
+	//Draw
+}
+
+func main() {
+
+	ebiten.SetWindowSize(640, 480)
+	ebiten.SetWindowTitle("game title")
+
+	gms := new(pgfsm.Machine)
+
+	gms.LayoutWidth = 640
+	gms.LayoutHeight = 480
+
+	my_sm := new(MyGameState)
+
+	gms.StateAdd(my_sm)
+
+	if err := ebiten.RunGame(gms); err != nil {
+		log.Fatal(err)
+	}
+}
+```
