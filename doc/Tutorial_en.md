@@ -1,5 +1,5 @@
 # Tutorial
-This tutorial is learning how to use Pen_Game_State_Machine.
+This tutorial is learning how to use The Pen Game Programing Finite State Machine.
 
 # The development environment
 
@@ -25,9 +25,9 @@ go mod init tutorial
 
 # Install needed libraies
 
-This library is a dependency with Ebiten, so when you put in Pen_Game_State_Machine, Ebiten will be downloaded with it.
+This library is a dependency with Ebiten, so when you put in The Pen Game Programing Finite State Machine, Ebiten will be downloaded with it.
 ```shell
-go get https://github.com/PenguinCabinet/Pen_Game_State_Machine
+go get github.com/PenguinCabinet/pgfsm
 ```
 
 Since this tutorial will also use text display, font-related libraries should also be included.
@@ -38,8 +38,8 @@ go get golang.org/x/image/font/opentype
 
 # Make the title scene
 
-First, let's create the title screen.  
-The title screen and game screens are created as states.  
+First, let's create the title scene.  
+The title scene and game scenes are created as states.  
 
 ```go
 package main
@@ -48,7 +48,7 @@ import (
 	"image/color"
 	"log"
 
-	"github.com/PenguinCabinet/Pen_Game_State_Machine"
+	"github.com/PenguinCabinet/pgfsm"
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/examples/resources/fonts"
 	"github.com/hajimehoshi/ebiten/text"
@@ -56,18 +56,18 @@ import (
 	"golang.org/x/image/font/opentype"
 )
 
-//This is the title screen state
+//This is the title scene state
 type Title_Game_State_t struct {
 	mplusNormalFont font.Face
 }
 
-//これがステートが最初に実行されたときに呼び出される関数
+//This is the function that is called when the state is first executed.
 func (sm *Title_Game_State_t) Init(
-	stack_deep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
-	delta float64, /*ここには前のフレームと今のフレーム間で経過した時間が入っています*/
+	stack_deep int, /*Here is the index of where this state is stacked on the stack*/
+	delta float64, /*Here is the time that has elapsed between the previous frame and the current frame.*/
 ) {
 
-	/*ここから Ebitenのフォントの初期化処理*/
+	/*Here is the start of the font initialization process of Ebiten*/
 	const dpi = 72
 
 	tt, err := opentype.Parse(fonts.MPlus1pRegular_ttf)
@@ -85,23 +85,23 @@ func (sm *Title_Game_State_t) Init(
 	if err != nil {
 		panic(err)
 	}
-	/*ここまで Ebitenのフォントの初期化処理*/
+	/*Here is the end of the font initialization process of Ebiten*/
 }
 
-//これはマイフレーム呼び出される関数です
-//このステートが実行されている時のみ、呼び出されます
+//This is the function that is called every frame.
+//Called only when this state is running.
 func (sm *Title_Game_State_t) Update(
-	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
+	screen *ebiten.Image, /*Screen of ebiten, but it is deprecated to describe it in Update*/
 	stack_deep int, delta float64,
-) Pen_Game_State_Machine.Game_State_result_t {
-	/*空のPen_Game_State_Machine.Game_State_result_tを返却することでループを継続します
-	Pen_Game_State_Machine.Game_State_result_tを書き換えることで、実行するものを新しいステートに変えたり
-	新しいステートをスタックの上に乗せたりすることができます*/
-	return Pen_Game_State_Machine.Game_State_result_t{}
+) pgfsm.Result {
+	/*Continue loop by returning an empty pgfsm.Result.
+	Change the current running state to the new state by rewriting the returned pgfsm.Result or
+	New states can be placed on top of the stack.*/
+	return pgfsm.Result{}
 }
 
-//これはマイフレーム呼び出される描写用の関数です
-//このステートが実行されていなくても、スタック上にあれば呼び出されます
+//This is the function for drawing that is called every frame.
+//Even if this state is not running, it will be called if it is on the stack.
 func (sm *Title_Game_State_t) Draw(screen *ebiten.Image, stack_deep int, delta float64) {
 	text.Draw(screen, "Game Title", sm.mplusNormalFont, 200, 100, color.White)
 }
@@ -111,46 +111,46 @@ func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Pen_Game_State_Machine")
 
-	gms := new(Pen_Game_State_Machine.Game_State_Machine_t)
+	gms := new(pgfsm.Machine)
 
-	gms.Layout_Width = 640
-	gms.Layout_Height = 480
+	gms.LayoutWidth = 640
+	gms.LayoutHeight = 480
 
 	Title_sm := new(Title_Game_State_t)
 
-	/*スタックにタイトル画面のステートを追加します*/
-	gms.State_Add(Title_sm)
+	/*Add the title scene state to the stack*/
+	gms.StateAdd(Title_sm)
 
 	if err := ebiten.RunGame(gms); err != nil {
 		log.Fatal(err)
 	}
 }
 ```
-実行結果  
+The execution Result   
 ![img1](image/img1.png)
 
-ソースコードにコメントを記述しておきました。  
-ステートはPen_Game_State_Machine.Game_State_tというinterfaceで仕様が決まっていて、それに基づいて実装します。  
-今回はTitle_Game_State_tとしてタイトル画面のステートを実装しています。
+Please watch comment in the source code. 
+State is specified in an interface called pgfsm.State, which is implemented accordingly.
+In this case, the state of the title scene is implemented as Title_Game_State_t.
 ```go
-type Game_State_t interface {
+type State interface {
 	Init(int, float64)
-	Update(*ebiten.Image, int, float64) Game_State_result_t
+	Update(*ebiten.Image, int, float64) Result
 	Draw(*ebiten.Image, int, float64)
 }
 ```
 
-また
+Also
 ```go
-    return Pen_Game_State_Machine.Game_State_result_t{}
+    return pgfsm.Result{}
 ```
-のところに注目してください。  
-このUpdateの戻り値を変えることによって、新しいステートに切り替えたり、新しいステートをスタック上に載せたりすることができます。  
+Please note this.
+By changing the return value of this Update, you can switch to a new state or put a new state on the stack. 
 
-# ゲーム画面と画面の切り替え
-タイトル画面が完成しました。  
-次にタイトル画面とゲーム画面の切り替えを実装してみましょう。  
-タイトル画面でsキーを入力すると、タイトル画面からゲーム画面に切り替えるようにします。
+# The game scene and switching between game scenes.
+The title scene has been completed.   
+Next, let's implement the title scene and switching between the title scene and the game scene.  
+Entering the s key on the title scene,switch from the title scene to the game scene.
 
 ```go
 package main
@@ -159,7 +159,7 @@ import (
 	"image/color"
 	"log"
 
-	"github.com/PenguinCabinet/Pen_Game_State_Machine"
+	"github.com/PenguinCabinet/pgfsm"
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/examples/resources/fonts"
 	"github.com/hajimehoshi/ebiten/inpututil"
@@ -168,17 +168,17 @@ import (
 	"golang.org/x/image/font/opentype"
 )
 
-//これがゲーム画面のステート
+//This is the game scene state.
 type Game_Main_State_t struct {
 	mplusNormalFont font.Face
 }
 
-//これがステートが最初に実行されたときに呼び出される関数
+//This is the function that is called when the state is first executed.
 func (sm *Game_Main_State_t) Init(
-	stack_deep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
-	delta float64, /*ここには前のフレームと今のフレーム間で経過した時間が入っています*/
+	stack_deep int, /*Here is the index of where this state is stacked on the stack.*/
+	delta float64, /*Here is the time that has elapsed between the previous frame and the current frame.*/
 ) {
-	/*ここから Ebitenのフォントの初期化処理*/
+	/*Here is the start of the font initialization process of Ebiten*/
 	const dpi = 72
 
 	tt, err := opentype.Parse(fonts.MPlus1pRegular_ttf)
@@ -196,38 +196,38 @@ func (sm *Game_Main_State_t) Init(
 	if err != nil {
 		panic(err)
 	}
-	/*ここまで Ebitenのフォントの初期化処理*/
+	/*Here is the end of the font initialization process of Ebiten*/
 }
 
-//これはマイフレーム呼び出される関数です
-//このステートが実行されている時のみ、呼び出されます
+//This is the function that is called every frame.
+//Called only when this state is running.
 func (sm *Game_Main_State_t) Update(
-	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
+	screen *ebiten.Image, /*Screen of ebiten, but it is deprecated to describe it in Update*/
 	stack_deep int, delta float64,
-) Pen_Game_State_Machine.Game_State_result_t {
-	/*空のPen_Game_State_Machine.Game_State_result_tを返却することでループを継続します
-	Pen_Game_State_Machine.Game_State_result_tを書き換えることで、実行するものを新しいステートに変えたり
-	新しいステートをスタックの上に乗せたりすることができます*/
-	return Pen_Game_State_Machine.Game_State_result_t{}
+) pgfsm.Result {
+	/*Continue loop by returning an empty pgfsm.Result.
+	Change the current running state to the new state by rewriting the returned pgfsm.Result or
+	New states can be placed on top of the stack.*/
+	return pgfsm.Result{}
 }
 
-//これはマイフレーム呼び出される描写用の関数です
-//このステートが実行されていなくても、スタック上にあれば呼び出されます
+//This is the function for drawing that is called every frame.
+//Even if this state is not running, it will be called if it is on the stack.
 func (sm *Game_Main_State_t) Draw(screen *ebiten.Image, stack_deep int, delta float64) {
 	text.Draw(screen, "Game Main", sm.mplusNormalFont, 200, 100, color.White)
 }
 
-//これがタイトル画面のステート
+//This is the title scene state
 type Title_Game_State_t struct {
 	mplusNormalFont font.Face
 }
 
-//これがステートが最初に実行されたときに呼び出される関数
+//This is the function that is called when the state is first executed.
 func (sm *Title_Game_State_t) Init(
-	stack_deep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
-	delta float64, /*ここには前のフレームと今のフレーム間で経過した時間が入っています*/
+	stack_deep int, /*Here is the index of where this state is stacked on the stack*/
+	delta float64, /*Here is the time that has elapsed between the previous frame and the current frame.*/
 ) {
-	/*ここから Ebitenのフォントの初期化処理*/
+	/*Here is the start of the font initialization process of Ebiten*/
 	const dpi = 72
 
 	tt, err := opentype.Parse(fonts.MPlus1pRegular_ttf)
@@ -245,35 +245,34 @@ func (sm *Title_Game_State_t) Init(
 	if err != nil {
 		panic(err)
 	}
-	/*ここまで Ebitenのフォントの初期化処理*/
+	/*Here is the end of the font initialization process of Ebiten*/
 }
 
-//これはマイフレーム呼び出される関数です
-//このステートが実行されている時のみ、呼び出されます
+//This is the function that is called every frame.
+//Called only when this state is running.
 func (sm *Title_Game_State_t) Update(
-	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
+	screen *ebiten.Image, /*Screen of ebiten, but it is deprecated to describe it in Update*/
 	stack_deep int, delta float64,
-) Pen_Game_State_Machine.Game_State_result_t {
+) pgfsm.Result {
 
-	/*sキーが入力された場合*/
+	/*If the s key is entered*/
 	if inpututil.IsKeyJustPressed(ebiten.KeyS) {
-		/*ここでステートマシンを切り替えます
-		Pen_Game_State_Machine.Game_State_result_changeは現在実行しているステートを
-		Next_Stateに切り替わります
-		ここでは現在実行中のタイトル画面のステートからゲーム画面のステートに切り替えています*/
-		return Pen_Game_State_Machine.Game_State_result_t{
-			Code:       Pen_Game_State_Machine.Game_State_result_change,
-			Next_State: new(Game_Main_State_t),
+		/*Change the state here
+		pgfsm.CodeChange changes the currently running state to NextState.
+		Here you changes the currently running title scene state to the game scene state.*/
+		return pgfsm.Result{
+			Code:       pgfsm.CodeChange,
+			NextState: new(Game_Main_State_t),
 		}
 	}
-	/*空のPen_Game_State_Machine.Game_State_result_tを返却することでループを継続します
-	Pen_Game_State_Machine.Game_State_result_tを書き換えることで、実行するものを新しいステートに変えたり
-	新しいステートをスタックの上に乗せたりすることができます*/
-	return Pen_Game_State_Machine.Game_State_result_t{}
+	/*Continue loop by returning an empty pgfsm.Result.
+	Change the current running state to the new state by rewriting the returned pgfsm.Result or
+	New states can be placed on top of the stack.*/
+	return pgfsm.Result{}
 }
 
-//これはマイフレーム呼び出される描写用の関数です
-//このステートが実行されていなくても、スタック上にあれば呼び出されます
+//This is the function for drawing that is called every frame.
+//Even if this state is not running, it will be called if it is on the stack.
 func (sm *Title_Game_State_t) Draw(screen *ebiten.Image, stack_deep int, delta float64) {
 	text.Draw(screen, "Game Title\nPressing S key,start!", sm.mplusNormalFont, 100, 100, color.White)
 }
@@ -283,15 +282,15 @@ func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Pen_Game_State_Machine")
 
-	gms := new(Pen_Game_State_Machine.Game_State_Machine_t)
+	gms := new(pgfsm.Machine)
 
-	gms.Layout_Width = 640
-	gms.Layout_Height = 480
+	gms.LayoutWidth = 640
+	gms.LayoutHeight = 480
 
 	Title_sm := new(Title_Game_State_t)
 
-	/*スタックにタイトル画面のステートを追加します*/
-	gms.State_Add(Title_sm)
+	/*Add the title scene state to the stack*/
+	gms.StateAdd(Title_sm)
 
 	if err := ebiten.RunGame(gms); err != nil {
 		log.Fatal(err)
@@ -300,22 +299,22 @@ func main() {
 
 ```
 ![img1](image/img2.gif)  
-sキーを押すとタイトル画面からゲーム画面に切り替わります!(Gifはループにしてあるので、ゲーム画面からタイトル画面にも切り替わっているように見えますが、実際は切り替わりません)
+Press the s key to switch from the title scene to the game scene! (The gif file is set to loop, so it looks like it also switch from the game scene to the title scene, but it does not.)
 ```go
-		return Pen_Game_State_Machine.Game_State_result_t{
-			Code:       Pen_Game_State_Machine.Game_State_result_change,
-			Next_State: new(Game_Main_State_t),
+		return pgfsm.Result{
+			Code:       pgfsm.CodeChange,
+			NextState: new(Game_Main_State_t),
 		}
 ```
-みそはここで、戻り値のPen_Game_State_Machine.Game_State_result_tを変えることでステートを切り替えることができるのです。
+Here is essential,It is possible to switch states by changing the returned pgfsm.Result.
 
-# マップ画面の実装
-タイトル画面とゲーム画面が完成しました。  
-次にマップ画面とマップ画面をスタックに乗せることを実装してみましょう。  
-ゲーム画面の時にmキーをおすとマップが開き、マップが開いているときにmキーを押すとマップが閉じます。  
-なぜ、単純にゲーム画面からマップ画面に切り替えるだけでは駄目なのでしょうか。  
-それはマップを開いている間もゲーム画面のデータを保持して、  
-マップが閉じたときに、開く前のゲーム画面に戻る必要があるからです。  
+# Implementation of the menu scene.
+The title scene and the game scene have been completed.  
+Next, let's implement putting the map scene and map scene on the stack.  
+Pressing the m key during the game scene opens the menu scene, and pressing the m key when the menu scene is open closes it.  
+Why can't we simply switch from the game scene to the menu scene?    
+That is because the game scene data is retained while the menu scene is open and   
+When the menu scene is closed, it is necessary to return to the game scene before opening.    
 
 ```go
 package main
@@ -324,7 +323,7 @@ import (
 	"image/color"
 	"log"
 
-	"github.com/PenguinCabinet/Pen_Game_State_Machine"
+	"github.com/PenguinCabinet/pgfsm"
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/examples/resources/fonts"
 	"github.com/hajimehoshi/ebiten/inpututil"
@@ -333,17 +332,17 @@ import (
 	"golang.org/x/image/font/opentype"
 )
 
-//これがメニュー画面のステート
+//This is the menu scene state
 type Menu_Game_State_t struct {
 	mplusNormalFont font.Face
 }
 
-//これがステートが最初に実行されたときに呼び出される関数
+//This is the function that is called when the state is first executed.
 func (sm *Menu_Game_State_t) Init(
-	stack_deep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
-	delta float64, /*ここには前のフレームと今のフレーム間で経過した時間が入っています*/
+	stack_deep int, /*Here is the index of where this state is stacked on the stack*/
+	delta float64, /*Here is the time that has elapsed between the previous frame and the current frame.*/
 ) {
-	/*ここから Ebitenのフォントの初期化処理*/
+	/*Here is the start of the font initialization process of Ebiten*/
 	const dpi = 72
 
 	tt, err := opentype.Parse(fonts.MPlus1pRegular_ttf)
@@ -361,50 +360,52 @@ func (sm *Menu_Game_State_t) Init(
 	if err != nil {
 		panic(err)
 	}
-	/*ここまで Ebitenのフォントの初期化処理*/
+	/*Here is the end of the font initialization process of Ebiten*/
 }
 
-//これはマイフレーム呼び出される関数です
-//このステートが実行されている時のみ、呼び出されます
+//This is the function that is called every frame.
+//Called only when this state is running.
 func (sm *Menu_Game_State_t) Update(
-	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
+	screen *ebiten.Image, /*Screen of ebiten, but it is deprecated to describe it in Update*/
 	stack_deep int, delta float64,
-) Pen_Game_State_Machine.Game_State_result_t {
+) pgfsm.Result {
 
-	/*mキーが入力された場合 メニューを閉じる*/
+	/*If m key is entered,the menu is closed*/
 	if inpututil.IsKeyJustPressed(ebiten.KeyM) {
-		/*ここで現在実行しているメニュー画面のステートマシンを消去します
-		「ゲーム画面、メニュー画面」の順でスタックにストックされているので、消去するとスタックの中身は
-		「ゲーム画面」となってゲーム画面に戻ります
+		/*
+		Here,delete the current running game scene state.
+		The stack is stocked in the order of "the game scene,the menu scene", 
+		so when you delete the current running game scene state, the contents of the stack will be
+		"the game scene" and moves back to the menu scene process.
 		*/
-		return Pen_Game_State_Machine.Game_State_result_t{
-			Code:       Pen_Game_State_Machine.Game_State_result_delete,
-			Next_State: nil,
+		return pgfsm.Result{
+			Code:       pgfsm.CodeDelete,
+			NextState: nil,
 		}
 	}
-	/*空のPen_Game_State_Machine.Game_State_result_tを返却することでループを継続します
-	Pen_Game_State_Machine.Game_State_result_tを書き換えることで、実行するものを新しいステートに変えたり
-	新しいステートをスタックの上に乗せたりすることができます*/
-	return Pen_Game_State_Machine.Game_State_result_t{}
+	/*Continue loop by returning an empty pgfsm.Result.
+	Change the current running state to the new state by rewriting the returned pgfsm.Result or
+	New states can be placed on top of the stack.*/
+	return pgfsm.Result{}
 }
 
-//これはマイフレーム呼び出される描写用の関数です
-//このステートが実行されていなくても、スタック上にあれば呼び出されます
+//This is the function for drawing that is called every frame.
+//Even if this state is not running, it will be called if it is on the stack.
 func (sm *Menu_Game_State_t) Draw(screen *ebiten.Image, stack_deep int, delta float64) {
 	text.Draw(screen, "Menu", sm.mplusNormalFont, 300, 240, color.White)
 }
 
-//これがゲーム画面のステート
+//This is the game scene state
 type Game_Main_State_t struct {
 	mplusNormalFont font.Face
 }
 
-//これがステートが最初に実行されたときに呼び出される関数
+//This is the function that is called when the state is first executed.
 func (sm *Game_Main_State_t) Init(
-	stack_deep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
-	delta float64, /*ここには前のフレームと今のフレーム間で経過した時間が入っています*/
+	stack_deep int, /*Here is the index of where this state is stacked on the stack*/
+	delta float64, /*Here is the time that has elapsed between the previous frame and the current frame.*/
 ) {
-	/*ここから Ebitenのフォントの初期化処理*/
+	/*Here is the start of the font initialization process of Ebiten*/
 	const dpi = 72
 
 	tt, err := opentype.Parse(fonts.MPlus1pRegular_ttf)
@@ -422,52 +423,53 @@ func (sm *Game_Main_State_t) Init(
 	if err != nil {
 		panic(err)
 	}
-	/*ここまで Ebitenのフォントの初期化処理*/
+	/*Here is the end of the font initialization process of Ebiten*/
 }
 
-//これはマイフレーム呼び出される関数です
-//このステートが実行されている時のみ、呼び出されます
-//つまりメニューを開いている間は、ゲーム画面のUpdate関数が実行されません
+//This is the function that is called every frame.
+//Called only when this state is running.
+//In other words,during opening the menu,The Update function is not being run.
 func (sm *Game_Main_State_t) Update(
-	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
+	screen *ebiten.Image, /*Screen of ebiten, but it is deprecated to describe it in Update*/
 	stack_deep int, delta float64,
-) Pen_Game_State_Machine.Game_State_result_t {
-	/*mキーが入力された場合 メニューを開く*/
+) pgfsm.Result {
+	/*If m key is entered,the menu is opened*/
 	if inpututil.IsKeyJustPressed(ebiten.KeyM) {
-		/*ここで現在実行しているゲーム画面の上にメニュー画面のステートをのせます
-		「ゲーム画面」の順でスタックにストックされているので、追加するとスタックの中身は
-		「ゲーム画面、メニュー画面」となってメニュー画面の処理に移ります
+		/*Here,put the menu state on the top of the current running game scene state.
+		The stack is stocked in the order of "game scene", 
+		so when you add the menu scene, the contents of the stack will be
+		"the game scene,the menu scene" and moves to the menu scene process.
 		*/
-		return Pen_Game_State_Machine.Game_State_result_t{
-			Code:       Pen_Game_State_Machine.Game_State_result_add,
-			Next_State: new(Menu_Game_State_t),
+		return pgfsm.Result{
+			Code:       pgfsm.CodeAdd,
+			NextState: new(Menu_Game_State_t),
 		}
 	}
 
-	/*空のPen_Game_State_Machine.Game_State_result_tを返却することでループを継続します
-	Pen_Game_State_Machine.Game_State_result_tを書き換えることで、実行するものを新しいステートに変えたり
-	新しいステートをスタックの上に乗せたりすることができます*/
-	return Pen_Game_State_Machine.Game_State_result_t{}
+	/*Continue loop by returning an empty pgfsm.Result.
+	Change the current running state to the new state by rewriting the returned pgfsm.Result or
+	New states can be placed on top of the stack.*/
+	return pgfsm.Result{}
 }
 
-//これはマイフレーム呼び出される描写用の関数です
-//このステートが実行されていなくても、スタック上にあれば呼び出されます
-//つまりメニューを開いている間も、ゲーム画面のdraw関数が実行されます
+//This is the function for drawing that is called every frame.
+//Even if this state is not running, it will be called if it is on the stack.
+//In other words,during opening the menu,The Drawe function is being run.
 func (sm *Game_Main_State_t) Draw(screen *ebiten.Image, stack_deep int, delta float64) {
 	text.Draw(screen, "Game Main", sm.mplusNormalFont, 200, 100, color.White)
 }
 
-//これがタイトル画面のステート
+//This is the title scene state
 type Title_Game_State_t struct {
 	mplusNormalFont font.Face
 }
 
-//これがステートが最初に実行されたときに呼び出される関数
+//This is the function that is called when the state is first executed.
 func (sm *Title_Game_State_t) Init(
-	stack_deep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
-	delta float64, /*ここには前のフレームと今のフレーム間で経過した時間が入っています*/
+	stack_deep int, /*Here is the index of where this state is stacked on the stack*/
+	delta float64, /*Here is the time that has elapsed between the previous frame and the current frame.*/
 ) {
-	/*ここから Ebitenのフォントの初期化処理*/
+	/*Here is the start of the font initialization process of Ebiten*/
 	const dpi = 72
 
 	tt, err := opentype.Parse(fonts.MPlus1pRegular_ttf)
@@ -485,35 +487,34 @@ func (sm *Title_Game_State_t) Init(
 	if err != nil {
 		panic(err)
 	}
-	/*ここまで Ebitenのフォントの初期化処理*/
+	/*Here is the end of the font initialization process of Ebiten*/
 }
 
-//これはマイフレーム呼び出される関数です
-//このステートが実行されている時のみ、呼び出されます
+//This is the function that is called every frame.
+//Called only when this state is running.
 func (sm *Title_Game_State_t) Update(
-	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
+	screen *ebiten.Image, /*Screen of ebiten, but it is deprecated to describe it in Update*/
 	stack_deep int, delta float64,
-) Pen_Game_State_Machine.Game_State_result_t {
+) pgfsm.Result {
 
-	/*sキーが入力された場合*/
+	/*If the s key is entered*/
 	if inpututil.IsKeyJustPressed(ebiten.KeyS) {
-		/*ここでステートマシンを切り替えます
-		Pen_Game_State_Machine.Game_State_result_changeは現在実行しているステートを
-		Next_Stateに切り替わります
-		ここでは現在実行中のタイトル画面のステートからゲーム画面のステートに切り替えています*/
-		return Pen_Game_State_Machine.Game_State_result_t{
-			Code:       Pen_Game_State_Machine.Game_State_result_change,
-			Next_State: new(Game_Main_State_t),
+		/*Change the state here
+		pgfsm.CodeChange changes the currently running state to NextState.
+		Here you changes the currently running title scene state to the game scene state.*/
+		return pgfsm.Result{
+			Code:       pgfsm.CodeChange,
+			NextState: new(Game_Main_State_t),
 		}
 	}
-	/*空のPen_Game_State_Machine.Game_State_result_tを返却することでループを継続します
-	Pen_Game_State_Machine.Game_State_result_tを書き換えることで、実行するものを新しいステートに変えたり
-	新しいステートをスタックの上に乗せたりすることができます*/
-	return Pen_Game_State_Machine.Game_State_result_t{}
+	/*Continue loop by returning an empty pgfsm.Result.
+	Change the current running state to the new state by rewriting the returned pgfsm.Result or
+	New states can be placed on top of the stack.*/
+	return pgfsm.Result{}
 }
 
-//これはマイフレーム呼び出される描写用の関数です
-//このステートが実行されていなくても、スタック上にあれば呼び出されます
+//This is the function for drawing that is called every frame.
+//Even if this state is not running, it will be called if it is on the stack.
 func (sm *Title_Game_State_t) Draw(screen *ebiten.Image, stack_deep int, delta float64) {
 	text.Draw(screen, "Game Title\nPressing S key,start!", sm.mplusNormalFont, 100, 100, color.White)
 }
@@ -523,16 +524,15 @@ func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Pen_Game_State_Machine")
 
-	gms := new(Pen_Game_State_Machine.Game_State_Machine_t)
+	gms := new(pgfsm.Machine)
 
-	gms.Layout_Width = 640
-	gms.Layout_Height = 480
+	gms.LayoutWidth = 640
+	gms.LayoutHeight = 480
 
 	Title_sm := new(Title_Game_State_t)
 
-	/*スタックにタイトル画面のステートを追加します*/
-	/*スタックにタイトル画面のステートを追加します*/
-	gms.State_Add(Title_sm)
+	/*Add the title scene state to the stack*/
+	gms.StateAdd(Title_sm)
 
 	if err := ebiten.RunGame(gms); err != nil {
 		log.Fatal(err)
@@ -541,9 +541,9 @@ func main() {
 
 ```
 ![img1](image/img3.gif)  
-ゲーム画面でmキーを押すとメニューが開いているのがわかります  
+Pressing the m key on the game scene,The menu scene is opened.
   
-メニューを開いている間、ゲーム画面のUpdate関数は**実行されません**、ゲーム画面のDraw関数は**実行されます**、ゲーム画面の変数は**保持され続けます**。(つまりデータを保持したまま、表示はされるが停止している状態になります)  
-切り替えるのではなくスタックに積むやり方は、JRPGの戦闘やメニュー画面の表示等に最適です。  
+While the menu is open, the Update function of the game scene **will not execute**, the Draw function of the game scene **will execute**, and the variables of the game scene **will continue to be held**. (In other words, the data is retained and displayed but stopped.)   
+The way they are stacked rather than switched is ideal for JRPG combat, the menu scene displays, etc. 
 
 
