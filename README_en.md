@@ -9,6 +9,7 @@ This is the state machine library for [Ebiten](https://ebiten.org/).
 # Documents
 * [Tutorial](doc/Tutorial_en.md) 
 * [pkg.go.dev](https://pkg.go.dev/github.com/PenguinCabinet/pgfsm)
+* [Examples](examples/)
 
 # Used by
 
