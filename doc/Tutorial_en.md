@@ -57,13 +57,13 @@ import (
 )
 
 //This is the title scene state
-type Title_Game_State_t struct {
+type TitleGameState struct {
 	mplusNormalFont font.Face
 }
 
 //This is the function that is called when the state is first executed.
-func (sm *Title_Game_State_t) Init(
-	stack_deep int, /*Here is the index of where this state is stacked on the stack*/
+func (sm *TitleGameState) Init(
+	stackdeep int, /*Here is the index of where this state is stacked on the stack*/
 	delta float64, /*Here is the time that has elapsed between the previous frame and the current frame.*/
 ) {
 
@@ -90,9 +90,9 @@ func (sm *Title_Game_State_t) Init(
 
 //This is the function that is called every frame.
 //Called only when this state is running.
-func (sm *Title_Game_State_t) Update(
+func (sm *TitleGameState) Update(
 	screen *ebiten.Image, /*Screen of ebiten, but it is deprecated to describe it in Update*/
-	stack_deep int, delta float64,
+	stackdeep int, delta float64,
 ) pgfsm.Result {
 	/*Continue loop by returning an empty pgfsm.Result.
 	Change the current running state to the new state by rewriting the returned pgfsm.Result or
@@ -102,7 +102,7 @@ func (sm *Title_Game_State_t) Update(
 
 //This is the function for drawing that is called every frame.
 //Even if this state is not running, it will be called if it is on the stack.
-func (sm *Title_Game_State_t) Draw(screen *ebiten.Image, stack_deep int, delta float64) {
+func (sm *TitleGameState) Draw(screen *ebiten.Image, stackdeep int, delta float64) {
 	text.Draw(screen, "Game Title", sm.mplusNormalFont, 200, 100, color.White)
 }
 
@@ -116,10 +116,10 @@ func main() {
 	gms.LayoutWidth = 640
 	gms.LayoutHeight = 480
 
-	Title_sm := new(Title_Game_State_t)
+	TitleSm := new(TitleGameState)
 
 	/*Add the title scene state to the stack*/
-	gms.StateAdd(Title_sm)
+	gms.StateAdd(TitleSm)
 
 	if err := ebiten.RunGame(gms); err != nil {
 		log.Fatal(err)
@@ -131,7 +131,7 @@ The execution Result
 
 Please watch comment in the source code. 
 State is specified in an interface called pgfsm.State, which is implemented accordingly.
-In this case, the state of the title scene is implemented as Title_Game_State_t.
+In this case, the state of the title scene is implemented as TitleGameState.
 ```go
 type State interface {
 	Init(int, float64)
@@ -169,13 +169,13 @@ import (
 )
 
 //This is the game scene state.
-type Game_Main_State_t struct {
+type GameMainState struct {
 	mplusNormalFont font.Face
 }
 
 //This is the function that is called when the state is first executed.
-func (sm *Game_Main_State_t) Init(
-	stack_deep int, /*Here is the index of where this state is stacked on the stack.*/
+func (sm *GameMainState) Init(
+	stackdeep int, /*Here is the index of where this state is stacked on the stack.*/
 	delta float64, /*Here is the time that has elapsed between the previous frame and the current frame.*/
 ) {
 	/*Here is the start of the font initialization process of Ebiten*/
@@ -201,9 +201,9 @@ func (sm *Game_Main_State_t) Init(
 
 //This is the function that is called every frame.
 //Called only when this state is running.
-func (sm *Game_Main_State_t) Update(
+func (sm *GameMainState) Update(
 	screen *ebiten.Image, /*Screen of ebiten, but it is deprecated to describe it in Update*/
-	stack_deep int, delta float64,
+	stackdeep int, delta float64,
 ) pgfsm.Result {
 	/*Continue loop by returning an empty pgfsm.Result.
 	Change the current running state to the new state by rewriting the returned pgfsm.Result or
@@ -213,18 +213,18 @@ func (sm *Game_Main_State_t) Update(
 
 //This is the function for drawing that is called every frame.
 //Even if this state is not running, it will be called if it is on the stack.
-func (sm *Game_Main_State_t) Draw(screen *ebiten.Image, stack_deep int, delta float64) {
+func (sm *GameMainState) Draw(screen *ebiten.Image, stackdeep int, delta float64) {
 	text.Draw(screen, "Game Main", sm.mplusNormalFont, 200, 100, color.White)
 }
 
 //This is the title scene state
-type Title_Game_State_t struct {
+type TitleGameState struct {
 	mplusNormalFont font.Face
 }
 
 //This is the function that is called when the state is first executed.
-func (sm *Title_Game_State_t) Init(
-	stack_deep int, /*Here is the index of where this state is stacked on the stack*/
+func (sm *TitleGameState) Init(
+	stackdeep int, /*Here is the index of where this state is stacked on the stack*/
 	delta float64, /*Here is the time that has elapsed between the previous frame and the current frame.*/
 ) {
 	/*Here is the start of the font initialization process of Ebiten*/
@@ -250,9 +250,9 @@ func (sm *Title_Game_State_t) Init(
 
 //This is the function that is called every frame.
 //Called only when this state is running.
-func (sm *Title_Game_State_t) Update(
+func (sm *TitleGameState) Update(
 	screen *ebiten.Image, /*Screen of ebiten, but it is deprecated to describe it in Update*/
-	stack_deep int, delta float64,
+	stackdeep int, delta float64,
 ) pgfsm.Result {
 
 	/*If the s key is entered*/
@@ -261,8 +261,8 @@ func (sm *Title_Game_State_t) Update(
 		pgfsm.CodeChange changes the currently running state to NextState.
 		Here you changes the currently running title scene state to the game scene state.*/
 		return pgfsm.Result{
-			Code:       pgfsm.CodeChange,
-			NextState: new(Game_Main_State_t),
+			Code:      pgfsm.CodeChange,
+			NextState: new(GameMainState),
 		}
 	}
 	/*Continue loop by returning an empty pgfsm.Result.
@@ -273,7 +273,7 @@ func (sm *Title_Game_State_t) Update(
 
 //This is the function for drawing that is called every frame.
 //Even if this state is not running, it will be called if it is on the stack.
-func (sm *Title_Game_State_t) Draw(screen *ebiten.Image, stack_deep int, delta float64) {
+func (sm *TitleGameState) Draw(screen *ebiten.Image, stackdeep int, delta float64) {
 	text.Draw(screen, "Game Title\nPressing S key,start!", sm.mplusNormalFont, 100, 100, color.White)
 }
 
@@ -287,16 +287,15 @@ func main() {
 	gms.LayoutWidth = 640
 	gms.LayoutHeight = 480
 
-	Title_sm := new(Title_Game_State_t)
+	TitleSm := new(TitleGameState)
 
 	/*Add the title scene state to the stack*/
-	gms.StateAdd(Title_sm)
+	gms.StateAdd(TitleSm)
 
 	if err := ebiten.RunGame(gms); err != nil {
 		log.Fatal(err)
 	}
 }
-
 ```
 ![img1](image/img2.gif)  
 Press the s key to switch from the title scene to the game scene! (The gif file is set to loop, so it looks like it also switch from the game scene to the title scene, but it does not.)
@@ -334,13 +333,13 @@ import (
 )
 
 //This is the menu scene state
-type Menu_Game_State_t struct {
+type MenuGameState struct {
 	mplusNormalFont font.Face
 }
 
 //This is the function that is called when the state is first executed.
-func (sm *Menu_Game_State_t) Init(
-	stack_deep int, /*Here is the index of where this state is stacked on the stack*/
+func (sm *MenuGameState) Init(
+	stackdeep int, /*Here is the index of where this state is stacked on the stack*/
 	delta float64, /*Here is the time that has elapsed between the previous frame and the current frame.*/
 ) {
 	/*Here is the start of the font initialization process of Ebiten*/
@@ -366,21 +365,21 @@ func (sm *Menu_Game_State_t) Init(
 
 //This is the function that is called every frame.
 //Called only when this state is running.
-func (sm *Menu_Game_State_t) Update(
+func (sm *MenuGameState) Update(
 	screen *ebiten.Image, /*Screen of ebiten, but it is deprecated to describe it in Update*/
-	stack_deep int, delta float64,
+	stackdeep int, delta float64,
 ) pgfsm.Result {
 
 	/*If m key is entered,the menu is closed*/
 	if inpututil.IsKeyJustPressed(ebiten.KeyM) {
 		/*
-		Here,delete the current running game scene state.
-		The stack is stocked in the order of "the game scene,the menu scene", 
-		so when you delete the current running game scene state, the contents of the stack will be
-		"the game scene" and moves back to the menu scene process.
+			Here,delete the current running game scene state.
+			The stack is stocked in the order of "the game scene,the menu scene",
+			so when you delete the current running game scene state, the contents of the stack will be
+			"the game scene" and moves back to the menu scene process.
 		*/
 		return pgfsm.Result{
-			Code:       pgfsm.CodeDelete,
+			Code:      pgfsm.CodeDelete,
 			NextState: nil,
 		}
 	}
@@ -392,18 +391,18 @@ func (sm *Menu_Game_State_t) Update(
 
 //This is the function for drawing that is called every frame.
 //Even if this state is not running, it will be called if it is on the stack.
-func (sm *Menu_Game_State_t) Draw(screen *ebiten.Image, stack_deep int, delta float64) {
+func (sm *MenuGameState) Draw(screen *ebiten.Image, stackdeep int, delta float64) {
 	text.Draw(screen, "Menu", sm.mplusNormalFont, 300, 240, color.White)
 }
 
 //This is the game scene state
-type Game_Main_State_t struct {
+type GameMainState struct {
 	mplusNormalFont font.Face
 }
 
 //This is the function that is called when the state is first executed.
-func (sm *Game_Main_State_t) Init(
-	stack_deep int, /*Here is the index of where this state is stacked on the stack*/
+func (sm *GameMainState) Init(
+	stackdeep int, /*Here is the index of where this state is stacked on the stack*/
 	delta float64, /*Here is the time that has elapsed between the previous frame and the current frame.*/
 ) {
 	/*Here is the start of the font initialization process of Ebiten*/
@@ -430,20 +429,20 @@ func (sm *Game_Main_State_t) Init(
 //This is the function that is called every frame.
 //Called only when this state is running.
 //In other words,during opening the menu,The Update function is not being run.
-func (sm *Game_Main_State_t) Update(
+func (sm *GameMainState) Update(
 	screen *ebiten.Image, /*Screen of ebiten, but it is deprecated to describe it in Update*/
-	stack_deep int, delta float64,
+	stackdeep int, delta float64,
 ) pgfsm.Result {
 	/*If m key is entered,the menu is opened*/
 	if inpututil.IsKeyJustPressed(ebiten.KeyM) {
 		/*Here,put the menu state on the top of the current running game scene state.
-		The stack is stocked in the order of "game scene", 
+		The stack is stocked in the order of "game scene",
 		so when you add the menu scene, the contents of the stack will be
 		"the game scene,the menu scene" and moves to the menu scene process.
 		*/
 		return pgfsm.Result{
-			Code:       pgfsm.CodeAdd,
-			NextState: new(Menu_Game_State_t),
+			Code:      pgfsm.CodeAdd,
+			NextState: new(MenuGameState),
 		}
 	}
 
@@ -456,18 +455,18 @@ func (sm *Game_Main_State_t) Update(
 //This is the function for drawing that is called every frame.
 //Even if this state is not running, it will be called if it is on the stack.
 //In other words,during opening the menu,The Drawe function is being run.
-func (sm *Game_Main_State_t) Draw(screen *ebiten.Image, stack_deep int, delta float64) {
+func (sm *GameMainState) Draw(screen *ebiten.Image, stackdeep int, delta float64) {
 	text.Draw(screen, "Game Main", sm.mplusNormalFont, 200, 100, color.White)
 }
 
 //This is the title scene state
-type Title_Game_State_t struct {
+type TitleGameState struct {
 	mplusNormalFont font.Face
 }
 
 //This is the function that is called when the state is first executed.
-func (sm *Title_Game_State_t) Init(
-	stack_deep int, /*Here is the index of where this state is stacked on the stack*/
+func (sm *TitleGameState) Init(
+	stackdeep int, /*Here is the index of where this state is stacked on the stack*/
 	delta float64, /*Here is the time that has elapsed between the previous frame and the current frame.*/
 ) {
 	/*Here is the start of the font initialization process of Ebiten*/
@@ -493,9 +492,9 @@ func (sm *Title_Game_State_t) Init(
 
 //This is the function that is called every frame.
 //Called only when this state is running.
-func (sm *Title_Game_State_t) Update(
+func (sm *TitleGameState) Update(
 	screen *ebiten.Image, /*Screen of ebiten, but it is deprecated to describe it in Update*/
-	stack_deep int, delta float64,
+	stackdeep int, delta float64,
 ) pgfsm.Result {
 
 	/*If the s key is entered*/
@@ -504,8 +503,8 @@ func (sm *Title_Game_State_t) Update(
 		pgfsm.CodeChange changes the currently running state to NextState.
 		Here you changes the currently running title scene state to the game scene state.*/
 		return pgfsm.Result{
-			Code:       pgfsm.CodeChange,
-			NextState: new(Game_Main_State_t),
+			Code:      pgfsm.CodeChange,
+			NextState: new(GameMainState),
 		}
 	}
 	/*Continue loop by returning an empty pgfsm.Result.
@@ -516,7 +515,7 @@ func (sm *Title_Game_State_t) Update(
 
 //This is the function for drawing that is called every frame.
 //Even if this state is not running, it will be called if it is on the stack.
-func (sm *Title_Game_State_t) Draw(screen *ebiten.Image, stack_deep int, delta float64) {
+func (sm *TitleGameState) Draw(screen *ebiten.Image, stackdeep int, delta float64) {
 	text.Draw(screen, "Game Title\nPressing S key,start!", sm.mplusNormalFont, 100, 100, color.White)
 }
 
@@ -530,10 +529,10 @@ func main() {
 	gms.LayoutWidth = 640
 	gms.LayoutHeight = 480
 
-	Title_sm := new(Title_Game_State_t)
+	TitleSm := new(TitleGameState)
 
 	/*Add the title scene state to the stack*/
-	gms.StateAdd(Title_sm)
+	gms.StateAdd(TitleSm)
 
 	if err := ebiten.RunGame(gms); err != nil {
 		log.Fatal(err)
