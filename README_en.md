@@ -45,7 +45,7 @@ func (sm *MyGameState) Init(
 
 func (sm *MyGameState) Update(
 	screen *ebiten.Image,
-	stack_deep int,
+	stackdeep int,
 	deltatime float64,
 ) pgfsm.Result {
 	//Update
@@ -55,7 +55,7 @@ func (sm *MyGameState) Update(
 	}
 }
 
-func (sm *MyGameState) Draw(screen *ebiten.Image, stack_deep int, deltatime float64) {
+func (sm *MyGameState) Draw(screen *ebiten.Image, stackdeep int, deltatime float64) {
 	//Draw
 }
 
@@ -69,9 +69,9 @@ func main() {
 	gms.LayoutWidth = 640
 	gms.LayoutHeight = 480
 
-	my_sm := new(MyGameState)
+	mySm := new(MyGameState)
 
-	gms.StateAdd(my_sm)
+	gms.StateAdd(mySm)
 
 	if err := ebiten.RunGame(gms); err != nil {
 		log.Fatal(err)
