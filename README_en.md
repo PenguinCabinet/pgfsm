@@ -65,12 +65,12 @@ func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("game title")
 
-	gms := new(pgfsm.Machine)
+	gms := &pgfsm.Machine{}
 
 	gms.LayoutWidth = 640
 	gms.LayoutHeight = 480
 
-	mySm := new(MyGameState)
+	mySm := &MyGameState{}
 
 	gms.StateAdd(mySm)
 

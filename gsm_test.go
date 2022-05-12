@@ -30,7 +30,7 @@ func (sm *StateForTest) Draw(screen *ebiten.Image, stackdeep int, delta float64)
 
 func TestEmptyOfMachine(t *testing.T) {
 
-	gms := new(Machine)
+	gms := &Machine{}
 
 	assert.Equal(t, gms.Empty(), true, "Run Empty func when empty.")
 	gms.StateAdd(&StateForTest{R: Result{}})
@@ -39,7 +39,7 @@ func TestEmptyOfMachine(t *testing.T) {
 
 func TestCodeNilOfMachine(t *testing.T) {
 
-	gms := new(Machine)
+	gms := &Machine{}
 
 	gms.StateAdd(&StateForTest{
 		R:  Result{},
@@ -53,7 +53,7 @@ func TestCodeNilOfMachine(t *testing.T) {
 
 func TestCodeChangeOfMachine(t *testing.T) {
 
-	gms := new(Machine)
+	gms := &Machine{}
 
 	gms.StateAdd(&StateForTest{
 		ID: "State1",
@@ -73,7 +73,7 @@ func TestCodeChangeOfMachine(t *testing.T) {
 
 func TestCodeAddOfMachine(t *testing.T) {
 
-	gms := new(Machine)
+	gms := &Machine{}
 
 	gms.StateAdd(&StateForTest{
 		ID: "State1",
@@ -97,7 +97,7 @@ func TestCodeAddOfMachine(t *testing.T) {
 
 func TestCodeDeleteOfMachine(t *testing.T) {
 
-	gms := new(Machine)
+	gms := &Machine{}
 
 	gms.StateAdd(&StateForTest{
 		ID: "State1",
@@ -115,7 +115,7 @@ func TestCodeDeleteOfMachine(t *testing.T) {
 
 func TestCodeAllDeleteAndChangeOfMachine(t *testing.T) {
 
-	gms := new(Machine)
+	gms := &Machine{}
 
 	gms.StateAdd(&StateForTest{
 		R:  Result{},
@@ -150,7 +150,7 @@ func TestCodeAllDeleteAndChangeOfMachine(t *testing.T) {
 
 func TestCodeInsertBackOfMachine(t *testing.T) {
 
-	gms := new(Machine)
+	gms := &Machine{}
 
 	gms.StateAdd(&StateForTest{
 		ID: "State1",
@@ -171,7 +171,7 @@ func TestCodeInsertBackOfMachine(t *testing.T) {
 	assert.Equal(t, gms.StateStack[0].(*StateForTest).ID, "State2", "Check the id of the state[0]")
 	assert.Equal(t, gms.StateStack[1].(*StateForTest).ID, "State1", "Check the id of the state[1]")
 
-	gms = new(Machine)
+	gms = &Machine{}
 
 	gms.StateAdd(&StateForTest{
 		R:  Result{},

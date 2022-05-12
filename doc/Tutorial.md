@@ -110,12 +110,12 @@ func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Pen_Game_State_Machine")
 
-	gms := new(pgfsm.Machine)
+	gms := &pgfsm.Machine{}
 
 	gms.LayoutWidth = 640
 	gms.LayoutHeight = 480
 
-	Titlesm := new(TitleGameState)
+	Titlesm := &TitleGameState{}
 
 	/*スタックにタイトル画面のステートを追加します*/
 	gms.StateAdd(Titlesm)
@@ -262,7 +262,7 @@ func (sm *TitleGameState) Update(
 		ここでは現在実行中のタイトル画面のステートからゲーム画面のステートに切り替えています*/
 		return pgfsm.Result{
 			Code:      pgfsm.CodeChange,
-			NextState: new(GameMainState),
+			NextState: &GameMainState{},
 		}
 	}
 	/*空のpgfsm.Resultを返却することでループを継続します
@@ -282,12 +282,12 @@ func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Pen_Game_State_Machine")
 
-	gms := new(pgfsm.Machine)
+	gms := &pgfsm.Machine{}
 
 	gms.LayoutWidth = 640
 	gms.LayoutHeight = 480
 
-	Titlesm := new(TitleGameState)
+	Titlesm := &TitleGameState{}
 
 	/*スタックにタイトル画面のステートを追加します*/
 	gms.StateAdd(Titlesm)
@@ -303,7 +303,7 @@ sキーを押すとタイトル画面からゲーム画面に切り替わりま�
 ```go
 		return pgfsm.Result{
 			Code:       pgfsm.CodeChange,
-			NextState: new(GameMainState),
+			NextState: &GameMainState{},
 		}
 ```
 みそはここで、戻り値のpgfsm.Resultを変えることでステートを切り替えることができるのです。
@@ -439,7 +439,7 @@ func (sm *GameMainState) Update(
 		*/
 		return pgfsm.Result{
 			Code:      pgfsm.CodeAdd,
-			NextState: new(MenuGameState),
+			NextState: &MenuGameState{},
 		}
 	}
 
@@ -502,7 +502,7 @@ func (sm *TitleGameState) Update(
 		ここでは現在実行中のタイトル画面のステートからゲーム画面のステートに切り替えています*/
 		return pgfsm.Result{
 			Code:      pgfsm.CodeChange,
-			NextState: new(GameMainState),
+			NextState: &GameMainState{},
 		}
 	}
 	/*空のpgfsm.Resultを返却することでループを継続します
@@ -522,12 +522,12 @@ func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Pen_Game_State_Machine")
 
-	gms := new(pgfsm.Machine)
+	gms := &pgfsm.Machine{}
 
 	gms.LayoutWidth = 640
 	gms.LayoutHeight = 480
 
-	Titlesm := new(TitleGameState)
+	Titlesm := &TitleGameState{}
 
 	/*スタックにタイトル画面のステートを追加します*/
 	gms.StateAdd(Titlesm)

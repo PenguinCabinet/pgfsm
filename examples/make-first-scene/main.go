@@ -67,12 +67,12 @@ func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Pen_Game_State_Machine")
 
-	gms := new(pgfsm.Machine)
+	gms := &pgfsm.Machine{}
 
 	gms.LayoutWidth = 640
 	gms.LayoutHeight = 480
 
-	TitleSm := new(TitleGameState)
+	TitleSm := &TitleGameState{}
 
 	/*Add the title scene state to the stack*/
 	gms.StateAdd(TitleSm)
