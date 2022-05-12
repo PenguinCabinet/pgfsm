@@ -13,19 +13,19 @@ type StateForTest struct {
 }
 
 func (sm *StateForTest) Init(
-	stack_deep int,
+	stackdeep int,
 	delta float64,
 ) {
 }
 
 func (sm *StateForTest) Update(
 	screen *ebiten.Image,
-	stack_deep int, delta float64,
+	stackdeep int, delta float64,
 ) Result {
 	return sm.R
 }
 
-func (sm *StateForTest) Draw(screen *ebiten.Image, stack_deep int, delta float64) {
+func (sm *StateForTest) Draw(screen *ebiten.Image, stackdeep int, delta float64) {
 }
 
 func TestEmptyOfMachine(t *testing.T) {
