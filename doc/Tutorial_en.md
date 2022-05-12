@@ -302,7 +302,7 @@ Press the s key to switch from the title scene to the game scene! (The gif file 
 ```go
 		return pgfsm.Result{
 			Code:       pgfsm.CodeChange,
-			NextState: new(Game_Main_State_t),
+			NextState: new(GameMainState),
 		}
 ```
 Here is essential,It is possible to switch states by changing the returned pgfsm.Result.

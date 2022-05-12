@@ -38,7 +38,7 @@ type MyGameState struct {
 }
 
 func (sm *MyGameState) Init(
-	stack_deep int, /*The index of this state.*/
+	stackdeep int, /*The index of this state.*/
 	deltatime float64, /*The deltatime between the previous frame and the current frame.*/
 ) {
 	//Init
