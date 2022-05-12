@@ -56,13 +56,13 @@ import (
 )
 
 //これがタイトル画面のステート
-type Title_Game_State_t struct {
+type TitleGameState struct {
 	mplusNormalFont font.Face
 }
 
 //これがステートが最初に実行されたときに呼び出される関数
-func (sm *Title_Game_State_t) Init(
-	stack_deep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
+func (sm *TitleGameState) Init(
+	stackdeep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
 	delta float64, /*ここには前のフレームと今のフレーム間で経過した時間が入っています*/
 ) {
 
@@ -89,9 +89,9 @@ func (sm *Title_Game_State_t) Init(
 
 //これはマイフレーム呼び出される関数です
 //このステートが実行されている時のみ、呼び出されます
-func (sm *Title_Game_State_t) Update(
+func (sm *TitleGameState) Update(
 	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
-	stack_deep int, delta float64,
+	stackdeep int, delta float64,
 ) pgfsm.Result {
 	/*空のpgfsm.Resultを返却することでループを継続します
 	pgfsm.Resultを書き換えることで、実行するものを新しいステートに変えたり
@@ -101,7 +101,7 @@ func (sm *Title_Game_State_t) Update(
 
 //これはマイフレーム呼び出される描写用の関数です
 //このステートが実行されていなくても、スタック上にあれば呼び出されます
-func (sm *Title_Game_State_t) Draw(screen *ebiten.Image, stack_deep int, delta float64) {
+func (sm *TitleGameState) Draw(screen *ebiten.Image, stackdeep int, delta float64) {
 	text.Draw(screen, "Game Title", sm.mplusNormalFont, 200, 100, color.White)
 }
 
@@ -110,15 +110,15 @@ func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Pen_Game_State_Machine")
 
-	gms := new(pgfsm.Machine)
+	gms := &pgfsm.Machine{}
 
 	gms.LayoutWidth = 640
 	gms.LayoutHeight = 480
 
-	Title_sm := new(Title_Game_State_t)
+	Titlesm := &TitleGameState{}
 
 	/*スタックにタイトル画面のステートを追加します*/
-	gms.StateAdd(Title_sm)
+	gms.StateAdd(Titlesm)
 
 	if err := ebiten.RunGame(gms); err != nil {
 		log.Fatal(err)
@@ -130,7 +130,7 @@ func main() {
 
 ソースコードにコメントを記述しておきました。  
 ステートはpgfsm.Stateというinterfaceで仕様が決まっていて、それに基づいて実装します。  
-今回はTitle_Game_State_tとしてタイトル画面のステートを実装しています。
+今回はTitleGameStateとしてタイトル画面のステートを実装しています。
 ```go
 type State interface {
 	Init(int, float64)
@@ -168,13 +168,13 @@ import (
 )
 
 //これがゲーム画面のステート
-type Game_Main_State_t struct {
+type GameMainState struct {
 	mplusNormalFont font.Face
 }
 
 //これがステートが最初に実行されたときに呼び出される関数
-func (sm *Game_Main_State_t) Init(
-	stack_deep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
+func (sm *GameMainState) Init(
+	stackdeep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
 	delta float64, /*ここには前のフレームと今のフレーム間で経過した時間が入っています*/
 ) {
 	/*ここから Ebitenのフォントの初期化処理*/
@@ -200,30 +200,30 @@ func (sm *Game_Main_State_t) Init(
 
 //これはマイフレーム呼び出される関数です
 //このステートが実行されている時のみ、呼び出されます
-func (sm *Game_Main_State_t) Update(
+func (sm *GameMainState) Update(
 	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
-	stack_deep int, delta float64,
+	stackdeep int, delta float64,
 ) pgfsm.Result {
-	/*空のpgfsm.Game_State_result_tを返却することでループを継続します
-	pgfsm.Game_State_result_tを書き換えることで、実行するものを新しいステートに変えたり
+	/*空のpgfsm.Resultを返却することでループを継続します
+	pgfsmResultを書き換えることで、実行するものを新しいステートに変えたり
 	新しいステートをスタックの上に乗せたりすることができます*/
 	return pgfsm.Result{}
 }
 
 //これはマイフレーム呼び出される描写用の関数です
 //このステートが実行されていなくても、スタック上にあれば呼び出されます
-func (sm *Game_Main_State_t) Draw(screen *ebiten.Image, stack_deep int, delta float64) {
+func (sm *GameMainState) Draw(screen *ebiten.Image, stackdeep int, delta float64) {
 	text.Draw(screen, "Game Main", sm.mplusNormalFont, 200, 100, color.White)
 }
 
 //これがタイトル画面のステート
-type Title_Game_State_t struct {
+type TitleGameState struct {
 	mplusNormalFont font.Face
 }
 
 //これがステートが最初に実行されたときに呼び出される関数
-func (sm *Title_Game_State_t) Init(
-	stack_deep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
+func (sm *TitleGameState) Init(
+	stackdeep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
 	delta float64, /*ここには前のフレームと今のフレーム間で経過した時間が入っています*/
 ) {
 	/*ここから Ebitenのフォントの初期化処理*/
@@ -249,31 +249,31 @@ func (sm *Title_Game_State_t) Init(
 
 //これはマイフレーム呼び出される関数です
 //このステートが実行されている時のみ、呼び出されます
-func (sm *Title_Game_State_t) Update(
+func (sm *TitleGameState) Update(
 	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
-	stack_deep int, delta float64,
+	stackdeep int, delta float64,
 ) pgfsm.Result {
 
 	/*sキーが入力された場合*/
 	if inpututil.IsKeyJustPressed(ebiten.KeyS) {
 		/*ここでステートマシンを切り替えます
 		pgfsm.CodeChangeは現在実行しているステートを
-		Next_Stateに切り替わります
+		NextStateに切り替わります
 		ここでは現在実行中のタイトル画面のステートからゲーム画面のステートに切り替えています*/
 		return pgfsm.Result{
-			Code:       pgfsm.CodeChange,
-			NextState: new(Game_Main_State_t),
+			Code:      pgfsm.CodeChange,
+			NextState: &GameMainState{},
 		}
 	}
-	/*空のpgfsm.Game_State_result_tを返却することでループを継続します
-	pgfsm.Game_State_result_tを書き換えることで、実行するものを新しいステートに変えたり
+	/*空のpgfsm.Resultを返却することでループを継続します
+	pgfsm.Resultを書き換えることで、実行するものを新しいステートに変えたり
 	新しいステートをスタックの上に乗せたりすることができます*/
 	return pgfsm.Result{}
 }
 
 //これはマイフレーム呼び出される描写用の関数です
 //このステートが実行されていなくても、スタック上にあれば呼び出されます
-func (sm *Title_Game_State_t) Draw(screen *ebiten.Image, stack_deep int, delta float64) {
+func (sm *TitleGameState) Draw(screen *ebiten.Image, stackdeep int, delta float64) {
 	text.Draw(screen, "Game Title\nPressing S key,start!", sm.mplusNormalFont, 100, 100, color.White)
 }
 
@@ -282,15 +282,15 @@ func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Pen_Game_State_Machine")
 
-	gms := new(pgfsm.Machine)
+	gms := &pgfsm.Machine{}
 
 	gms.LayoutWidth = 640
 	gms.LayoutHeight = 480
 
-	Title_sm := new(Title_Game_State_t)
+	Titlesm := &TitleGameState{}
 
 	/*スタックにタイトル画面のステートを追加します*/
-	gms.StateAdd(Title_sm)
+	gms.StateAdd(Titlesm)
 
 	if err := ebiten.RunGame(gms); err != nil {
 		log.Fatal(err)
@@ -303,7 +303,7 @@ sキーを押すとタイトル画面からゲーム画面に切り替わりま�
 ```go
 		return pgfsm.Result{
 			Code:       pgfsm.CodeChange,
-			NextState: new(Game_Main_State_t),
+			NextState: &GameMainState{},
 		}
 ```
 みそはここで、戻り値のpgfsm.Resultを変えることでステートを切り替えることができるのです。
@@ -333,13 +333,13 @@ import (
 )
 
 //これがメニュー画面のステート
-type Menu_Game_State_t struct {
+type MenuGameState struct {
 	mplusNormalFont font.Face
 }
 
 //これがステートが最初に実行されたときに呼び出される関数
-func (sm *Menu_Game_State_t) Init(
-	stack_deep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
+func (sm *MenuGameState) Init(
+	stackdeep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
 	delta float64, /*ここには前のフレームと今のフレーム間で経過した時間が入っています*/
 ) {
 	/*ここから Ebitenのフォントの初期化処理*/
@@ -365,9 +365,9 @@ func (sm *Menu_Game_State_t) Init(
 
 //これはマイフレーム呼び出される関数です
 //このステートが実行されている時のみ、呼び出されます
-func (sm *Menu_Game_State_t) Update(
+func (sm *MenuGameState) Update(
 	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
-	stack_deep int, delta float64,
+	stackdeep int, delta float64,
 ) pgfsm.Result {
 
 	/*mキーが入力された場合 メニューを閉じる*/
@@ -377,7 +377,7 @@ func (sm *Menu_Game_State_t) Update(
 		「ゲーム画面」となってゲーム画面に戻ります
 		*/
 		return pgfsm.Result{
-			Code:       pgfsm.CodeDelete,
+			Code:      pgfsm.CodeDelete,
 			NextState: nil,
 		}
 	}
@@ -389,18 +389,18 @@ func (sm *Menu_Game_State_t) Update(
 
 //これはマイフレーム呼び出される描写用の関数です
 //このステートが実行されていなくても、スタック上にあれば呼び出されます
-func (sm *Menu_Game_State_t) Draw(screen *ebiten.Image, stack_deep int, delta float64) {
+func (sm *MenuGameState) Draw(screen *ebiten.Image, stackdeep int, delta float64) {
 	text.Draw(screen, "Menu", sm.mplusNormalFont, 300, 240, color.White)
 }
 
 //これがゲーム画面のステート
-type Game_Main_State_t struct {
+type GameMainState struct {
 	mplusNormalFont font.Face
 }
 
 //これがステートが最初に実行されたときに呼び出される関数
-func (sm *Game_Main_State_t) Init(
-	stack_deep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
+func (sm *GameMainState) Init(
+	stackdeep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
 	delta float64, /*ここには前のフレームと今のフレーム間で経過した時間が入っています*/
 ) {
 	/*ここから Ebitenのフォントの初期化処理*/
@@ -427,9 +427,9 @@ func (sm *Game_Main_State_t) Init(
 //これはマイフレーム呼び出される関数です
 //このステートが実行されている時のみ、呼び出されます
 //つまりメニューを開いている間は、ゲーム画面のUpdate関数が実行されません
-func (sm *Game_Main_State_t) Update(
+func (sm *GameMainState) Update(
 	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
-	stack_deep int, delta float64,
+	stackdeep int, delta float64,
 ) pgfsm.Result {
 	/*mキーが入力された場合 メニューを開く*/
 	if inpututil.IsKeyJustPressed(ebiten.KeyM) {
@@ -438,8 +438,8 @@ func (sm *Game_Main_State_t) Update(
 		「ゲーム画面、メニュー画面」となってメニュー画面の処理に移ります
 		*/
 		return pgfsm.Result{
-			Code:       pgfsm.CodeAdd,
-			NextState: new(Menu_Game_State_t),
+			Code:      pgfsm.CodeAdd,
+			NextState: &MenuGameState{},
 		}
 	}
 
@@ -452,18 +452,18 @@ func (sm *Game_Main_State_t) Update(
 //これはマイフレーム呼び出される描写用の関数です
 //このステートが実行されていなくても、スタック上にあれば呼び出されます
 //つまりメニューを開いている間も、ゲーム画面のdraw関数が実行されます
-func (sm *Game_Main_State_t) Draw(screen *ebiten.Image, stack_deep int, delta float64) {
+func (sm *GameMainState) Draw(screen *ebiten.Image, stackdeep int, delta float64) {
 	text.Draw(screen, "Game Main", sm.mplusNormalFont, 200, 100, color.White)
 }
 
 //これがタイトル画面のステート
-type Title_Game_State_t struct {
+type TitleGameState struct {
 	mplusNormalFont font.Face
 }
 
 //これがステートが最初に実行されたときに呼び出される関数
-func (sm *Title_Game_State_t) Init(
-	stack_deep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
+func (sm *TitleGameState) Init(
+	stackdeep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
 	delta float64, /*ここには前のフレームと今のフレーム間で経過した時間が入っています*/
 ) {
 	/*ここから Ebitenのフォントの初期化処理*/
@@ -489,20 +489,20 @@ func (sm *Title_Game_State_t) Init(
 
 //これはマイフレーム呼び出される関数です
 //このステートが実行されている時のみ、呼び出されます
-func (sm *Title_Game_State_t) Update(
+func (sm *TitleGameState) Update(
 	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
-	stack_deep int, delta float64,
+	stackdeep int, delta float64,
 ) pgfsm.Result {
 
 	/*sキーが入力された場合*/
 	if inpututil.IsKeyJustPressed(ebiten.KeyS) {
 		/*ここでステートマシンを切り替えます
-		pgfsm.Game_State_result_changeは現在実行しているステートを
-		Next_Stateに切り替わります
+		pgfsm.CodeChangeは現在実行しているステートを
+		NextStateに切り替わります
 		ここでは現在実行中のタイトル画面のステートからゲーム画面のステートに切り替えています*/
 		return pgfsm.Result{
-			Code:       pgfsm.CodeChange,
-			NextState: new(Game_Main_State_t),
+			Code:      pgfsm.CodeChange,
+			NextState: &GameMainState{},
 		}
 	}
 	/*空のpgfsm.Resultを返却することでループを継続します
@@ -513,7 +513,7 @@ func (sm *Title_Game_State_t) Update(
 
 //これはマイフレーム呼び出される描写用の関数です
 //このステートが実行されていなくても、スタック上にあれば呼び出されます
-func (sm *Title_Game_State_t) Draw(screen *ebiten.Image, stack_deep int, delta float64) {
+func (sm *TitleGameState) Draw(screen *ebiten.Image, stackdeep int, delta float64) {
 	text.Draw(screen, "Game Title\nPressing S key,start!", sm.mplusNormalFont, 100, 100, color.White)
 }
 
@@ -522,15 +522,15 @@ func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Pen_Game_State_Machine")
 
-	gms := new(pgfsm.Machine)
+	gms := &pgfsm.Machine{}
 
 	gms.LayoutWidth = 640
 	gms.LayoutHeight = 480
 
-	Title_sm := new(Title_Game_State_t)
+	Titlesm := &TitleGameState{}
 
 	/*スタックにタイトル画面のステートを追加します*/
-	gms.StateAdd(Title_sm)
+	gms.StateAdd(Titlesm)
 
 	if err := ebiten.RunGame(gms); err != nil {
 		log.Fatal(err)

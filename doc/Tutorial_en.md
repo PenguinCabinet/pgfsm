@@ -111,12 +111,12 @@ func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Pen_Game_State_Machine")
 
-	gms := new(pgfsm.Machine)
+	gms := &pgfsm.Machine{}
 
 	gms.LayoutWidth = 640
 	gms.LayoutHeight = 480
 
-	TitleSm := new(TitleGameState)
+	TitleSm := &TitleGameState{}
 
 	/*Add the title scene state to the stack*/
 	gms.StateAdd(TitleSm)
@@ -262,7 +262,7 @@ func (sm *TitleGameState) Update(
 		Here you changes the currently running title scene state to the game scene state.*/
 		return pgfsm.Result{
 			Code:      pgfsm.CodeChange,
-			NextState: new(GameMainState),
+			NextState: &GameMainState{},
 		}
 	}
 	/*Continue loop by returning an empty pgfsm.Result.
@@ -282,12 +282,12 @@ func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Pen_Game_State_Machine")
 
-	gms := new(pgfsm.Machine)
+	gms := &pgfsm.Machine{}
 
 	gms.LayoutWidth = 640
 	gms.LayoutHeight = 480
 
-	TitleSm := new(TitleGameState)
+	TitleSm := &TitleGameState{}
 
 	/*Add the title scene state to the stack*/
 	gms.StateAdd(TitleSm)
@@ -302,7 +302,7 @@ Press the s key to switch from the title scene to the game scene! (The gif file 
 ```go
 		return pgfsm.Result{
 			Code:       pgfsm.CodeChange,
-			NextState: new(Game_Main_State_t),
+			NextState: &GameMainState{},
 		}
 ```
 Here is essential,It is possible to switch states by changing the returned pgfsm.Result.
@@ -442,7 +442,7 @@ func (sm *GameMainState) Update(
 		*/
 		return pgfsm.Result{
 			Code:      pgfsm.CodeAdd,
-			NextState: new(MenuGameState),
+			NextState: &MenuGameState{},
 		}
 	}
 
@@ -504,7 +504,7 @@ func (sm *TitleGameState) Update(
 		Here you changes the currently running title scene state to the game scene state.*/
 		return pgfsm.Result{
 			Code:      pgfsm.CodeChange,
-			NextState: new(GameMainState),
+			NextState: &GameMainState{},
 		}
 	}
 	/*Continue loop by returning an empty pgfsm.Result.
@@ -524,12 +524,12 @@ func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Pen_Game_State_Machine")
 
-	gms := new(pgfsm.Machine)
+	gms := &pgfsm.Machine{}
 
 	gms.LayoutWidth = 640
 	gms.LayoutHeight = 480
 
-	TitleSm := new(TitleGameState)
+	TitleSm := &TitleGameState{}
 
 	/*Add the title scene state to the stack*/
 	gms.StateAdd(TitleSm)

@@ -38,7 +38,7 @@ type MyGameState struct {
 }
 
 func (sm *MyGameState) Init(
-	stack_deep int, /*The index of this state.*/
+	stackdeep int, /*The index of this state.*/
 	deltatime float64, /*The deltatime between the previous frame and the current frame.*/
 ) {
 	//Init
@@ -65,12 +65,12 @@ func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("game title")
 
-	gms := new(pgfsm.Machine)
+	gms := &pgfsm.Machine{}
 
 	gms.LayoutWidth = 640
 	gms.LayoutHeight = 480
 
-	mySm := new(MyGameState)
+	mySm := &MyGameState{}
 
 	gms.StateAdd(mySm)
 
