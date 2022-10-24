@@ -56,7 +56,7 @@ func TestSelectState(t *testing.T) {
 				}
 			},
 		},
-		Is_Loop: true,
+		IsLoop: true,
 	}
 
 	assert.Equal(t, s.Index, 0)
