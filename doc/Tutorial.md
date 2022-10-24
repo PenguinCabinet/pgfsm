@@ -1,5 +1,5 @@
 # チュートリアル
-このチュートリアルでは、The Pen Game Programing Finite State Machineの使い方を学んでいきます  
+このチュートリアルでは、The Pen Game Programing Finite State Machineの使い方を学んでいきます。  
 
 # 開発環境
 
@@ -9,11 +9,10 @@ go version go1.17.5 windows/amd64
 ```
 
 # はじめに
-このライブラリは[JRPGの作り方：ゲーム開発者向けの手引き](https://gamedevelopment.tutsplus.com/ja/articles/how-to-build-a-jrpg-a-primer-for-game-developers--gamedev-6676)に影響を受けています  
-ゲームステートについてわかりやすく書かれていて、このチュートリアルを読む前に、これを読んで大まかな考え方を理解することをおすすめします
+このライブラリは[JRPGの作り方：ゲーム開発者向けの手引き](https://gamedevelopment.tutsplus.com/ja/articles/how-to-build-a-jrpg-a-primer-for-game-developers--gamedev-6676)に影響を受けています。     
+ゲームステートについてわかりやすく書かれていて、このチュートリアルを読む前に、これを読んで大まかな考え方を理解することをおすすめします。
 
-# プロジェクトページの作成
-まず、それがなければ話になりません  
+# プロジェクトページの作成  
 作り方は一般的なGoのものと同じです。
 
 ```shell
@@ -539,7 +538,7 @@ func main() {
 
 ```
 ![img1](image/img3.gif)  
-ゲーム画面でmキーを押すとメニューが開いているのがわかります  
+ゲーム画面でmキーを押すとメニューが開いているのがわかります。  
   
 メニューを開いている間、ゲーム画面のUpdate関数は**実行されません**、ゲーム画面のDraw関数は**実行されます**、ゲーム画面の変数は**保持され続けます**。(つまりデータを保持したまま、表示はされるが停止している状態になります)  
 切り替えるのではなくスタックに積むやり方は、JRPGの戦闘やメニュー画面の表示等に最適です。  
