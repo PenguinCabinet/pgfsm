@@ -39,15 +39,12 @@ type MyGameState struct {
 
 func (sm *MyGameState) Init(
 	stackdeep int, /*The index of this state.*/
-	deltatime float64, /*The deltatime between the previous frame and the current frame.*/
 ) {
 	//Init
 }
 
 func (sm *MyGameState) Update(
-	screen *ebiten.Image,
 	stackdeep int,
-	deltatime float64,
 ) pgfsm.Result {
 	//Update
 	return pgfsm.Result{
@@ -56,7 +53,7 @@ func (sm *MyGameState) Update(
 	}
 }
 
-func (sm *MyGameState) Draw(screen *ebiten.Image, stackdeep int, deltatime float64) {
+func (sm *MyGameState) Draw(screen *ebiten.Image, stackdeep int) {
 	//Draw
 }
 
