@@ -5,10 +5,10 @@ import (
 	"log"
 
 	"github.com/PenguinCabinet/pgfsm"
-	"github.com/hajimehoshi/ebiten"
-	"github.com/hajimehoshi/ebiten/examples/resources/fonts"
-	"github.com/hajimehoshi/ebiten/inpututil"
-	"github.com/hajimehoshi/ebiten/text"
+	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/examples/resources/fonts"
+	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"github.com/hajimehoshi/ebiten/v2/text"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/opentype"
 )
@@ -21,7 +21,6 @@ type MenuGameState struct {
 //This is the function that is called when the state is first executed.
 func (sm *MenuGameState) Init(
 	stackdeep int, /*Here is the index of where this state is stacked on the stack*/
-	delta float64, /*Here is the time that has elapsed between the previous frame and the current frame.*/
 ) {
 	/*Here is the start of the font initialization process of Ebiten*/
 	const dpi = 72
@@ -47,8 +46,7 @@ func (sm *MenuGameState) Init(
 //This is the function that is called every frame.
 //Called only when this state is running.
 func (sm *MenuGameState) Update(
-	screen *ebiten.Image, /*Screen of ebiten, but it is deprecated to describe it in Update*/
-	stackdeep int, delta float64,
+	stackdeep int,
 ) pgfsm.Result {
 
 	/*If m key is entered,the menu is closed*/
@@ -72,7 +70,7 @@ func (sm *MenuGameState) Update(
 
 //This is the function for drawing that is called every frame.
 //Even if this state is not running, it will be called if it is on the stack.
-func (sm *MenuGameState) Draw(screen *ebiten.Image, stackdeep int, delta float64) {
+func (sm *MenuGameState) Draw(screen *ebiten.Image, stackdeep int) {
 	text.Draw(screen, "Menu", sm.mplusNormalFont, 300, 240, color.White)
 }
 

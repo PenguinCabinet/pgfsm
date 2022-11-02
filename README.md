@@ -46,9 +46,7 @@ func (sm *MyGameState) Init(
 }
 
 func (sm *MyGameState) Update(
-	screen *ebiten.Image,
-	stackdeep int,
-	deltatime float64,
+	stackdeep int
 ) pgfsm.Result {
 	//Update
 	return pgfsm.Result{
@@ -57,7 +55,7 @@ func (sm *MyGameState) Update(
 	}
 }
 
-func (sm *MyGameState) Draw(screen *ebiten.Image, stackdeep int, deltatime float64) {
+func (sm *MyGameState) Draw(screen *ebiten.Image, stackdeep int) {
 	//Draw
 }
 

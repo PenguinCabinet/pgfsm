@@ -47,9 +47,9 @@ import (
 	"log"
 
 	"github.com/PenguinCabinet/pgfsm"
-	"github.com/hajimehoshi/ebiten"
-	"github.com/hajimehoshi/ebiten/examples/resources/fonts"
-	"github.com/hajimehoshi/ebiten/text"
+	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/examples/resources/fonts"
+	"github.com/hajimehoshi/ebiten/v2/text"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/opentype"
 )
@@ -62,7 +62,6 @@ type TitleGameState struct {
 //これがステートが最初に実行されたときに呼び出される関数
 func (sm *TitleGameState) Init(
 	stackdeep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
-	delta float64, /*ここには前のフレームと今のフレーム間で経過した時間が入っています*/
 ) {
 
 	/*ここから Ebitenのフォントの初期化処理*/
@@ -89,8 +88,7 @@ func (sm *TitleGameState) Init(
 //これはマイフレーム呼び出される関数です
 //このステートが実行されている時のみ、呼び出されます
 func (sm *TitleGameState) Update(
-	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
-	stackdeep int, delta float64,
+	stackdeep int, 
 ) pgfsm.Result {
 	/*空のpgfsm.Resultを返却することでループを継続します
 	pgfsm.Resultを書き換えることで、実行するものを新しいステートに変えたり
@@ -100,7 +98,7 @@ func (sm *TitleGameState) Update(
 
 //これはマイフレーム呼び出される描写用の関数です
 //このステートが実行されていなくても、スタック上にあれば呼び出されます
-func (sm *TitleGameState) Draw(screen *ebiten.Image, stackdeep int, delta float64) {
+func (sm *TitleGameState) Draw(screen *ebiten.Image, stackdeep int) {
 	text.Draw(screen, "Game Title", sm.mplusNormalFont, 200, 100, color.White)
 }
 
@@ -158,10 +156,10 @@ import (
 	"log"
 
 	"github.com/PenguinCabinet/pgfsm"
-	"github.com/hajimehoshi/ebiten"
-	"github.com/hajimehoshi/ebiten/examples/resources/fonts"
-	"github.com/hajimehoshi/ebiten/inpututil"
-	"github.com/hajimehoshi/ebiten/text"
+	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/examples/resources/fonts"
+	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"github.com/hajimehoshi/ebiten/v2/text"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/opentype"
 )
@@ -174,7 +172,6 @@ type GameMainState struct {
 //これがステートが最初に実行されたときに呼び出される関数
 func (sm *GameMainState) Init(
 	stackdeep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
-	delta float64, /*ここには前のフレームと今のフレーム間で経過した時間が入っています*/
 ) {
 	/*ここから Ebitenのフォントの初期化処理*/
 	const dpi = 72
@@ -200,8 +197,7 @@ func (sm *GameMainState) Init(
 //これはマイフレーム呼び出される関数です
 //このステートが実行されている時のみ、呼び出されます
 func (sm *GameMainState) Update(
-	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
-	stackdeep int, delta float64,
+	stackdeep int,
 ) pgfsm.Result {
 	/*空のpgfsm.Resultを返却することでループを継続します
 	pgfsmResultを書き換えることで、実行するものを新しいステートに変えたり
@@ -211,7 +207,7 @@ func (sm *GameMainState) Update(
 
 //これはマイフレーム呼び出される描写用の関数です
 //このステートが実行されていなくても、スタック上にあれば呼び出されます
-func (sm *GameMainState) Draw(screen *ebiten.Image, stackdeep int, delta float64) {
+func (sm *GameMainState) Draw(screen *ebiten.Image, stackdeep int) {
 	text.Draw(screen, "Game Main", sm.mplusNormalFont, 200, 100, color.White)
 }
 
@@ -223,7 +219,6 @@ type TitleGameState struct {
 //これがステートが最初に実行されたときに呼び出される関数
 func (sm *TitleGameState) Init(
 	stackdeep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
-	delta float64, /*ここには前のフレームと今のフレーム間で経過した時間が入っています*/
 ) {
 	/*ここから Ebitenのフォントの初期化処理*/
 	const dpi = 72
@@ -249,8 +244,7 @@ func (sm *TitleGameState) Init(
 //これはマイフレーム呼び出される関数です
 //このステートが実行されている時のみ、呼び出されます
 func (sm *TitleGameState) Update(
-	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
-	stackdeep int, delta float64,
+	stackdeep int,
 ) pgfsm.Result {
 
 	/*sキーが入力された場合*/
@@ -272,7 +266,7 @@ func (sm *TitleGameState) Update(
 
 //これはマイフレーム呼び出される描写用の関数です
 //このステートが実行されていなくても、スタック上にあれば呼び出されます
-func (sm *TitleGameState) Draw(screen *ebiten.Image, stackdeep int, delta float64) {
+func (sm *TitleGameState) Draw(screen *ebiten.Image, stackdeep int) {
 	text.Draw(screen, "Game Title\nPressing S key,start!", sm.mplusNormalFont, 100, 100, color.White)
 }
 
@@ -323,10 +317,10 @@ import (
 	"log"
 
 	"github.com/PenguinCabinet/pgfsm"
-	"github.com/hajimehoshi/ebiten"
-	"github.com/hajimehoshi/ebiten/examples/resources/fonts"
-	"github.com/hajimehoshi/ebiten/inpututil"
-	"github.com/hajimehoshi/ebiten/text"
+	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/examples/resources/fonts"
+	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"github.com/hajimehoshi/ebiten/v2/text"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/opentype"
 )
@@ -339,7 +333,6 @@ type MenuGameState struct {
 //これがステートが最初に実行されたときに呼び出される関数
 func (sm *MenuGameState) Init(
 	stackdeep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
-	delta float64, /*ここには前のフレームと今のフレーム間で経過した時間が入っています*/
 ) {
 	/*ここから Ebitenのフォントの初期化処理*/
 	const dpi = 72
@@ -366,7 +359,7 @@ func (sm *MenuGameState) Init(
 //このステートが実行されている時のみ、呼び出されます
 func (sm *MenuGameState) Update(
 	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
-	stackdeep int, delta float64,
+	stackdeep int,
 ) pgfsm.Result {
 
 	/*mキーが入力された場合 メニューを閉じる*/
@@ -400,7 +393,6 @@ type GameMainState struct {
 //これがステートが最初に実行されたときに呼び出される関数
 func (sm *GameMainState) Init(
 	stackdeep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
-	delta float64, /*ここには前のフレームと今のフレーム間で経過した時間が入っています*/
 ) {
 	/*ここから Ebitenのフォントの初期化処理*/
 	const dpi = 72
@@ -428,7 +420,7 @@ func (sm *GameMainState) Init(
 //つまりメニューを開いている間は、ゲーム画面のUpdate関数が実行されません
 func (sm *GameMainState) Update(
 	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
-	stackdeep int, delta float64,
+	stackdeep int,
 ) pgfsm.Result {
 	/*mキーが入力された場合 メニューを開く*/
 	if inpututil.IsKeyJustPressed(ebiten.KeyM) {
@@ -451,7 +443,7 @@ func (sm *GameMainState) Update(
 //これはマイフレーム呼び出される描写用の関数です
 //このステートが実行されていなくても、スタック上にあれば呼び出されます
 //つまりメニューを開いている間も、ゲーム画面のdraw関数が実行されます
-func (sm *GameMainState) Draw(screen *ebiten.Image, stackdeep int, delta float64) {
+func (sm *GameMainState) Draw(screen *ebiten.Image, stackdeep int) {
 	text.Draw(screen, "Game Main", sm.mplusNormalFont, 200, 100, color.White)
 }
 
@@ -463,7 +455,6 @@ type TitleGameState struct {
 //これがステートが最初に実行されたときに呼び出される関数
 func (sm *TitleGameState) Init(
 	stackdeep int, /*ここにはこのステートがスタックのどの位置に積まれているかインデックスが入っています*/
-	delta float64, /*ここには前のフレームと今のフレーム間で経過した時間が入っています*/
 ) {
 	/*ここから Ebitenのフォントの初期化処理*/
 	const dpi = 72
@@ -489,8 +480,7 @@ func (sm *TitleGameState) Init(
 //これはマイフレーム呼び出される関数です
 //このステートが実行されている時のみ、呼び出されます
 func (sm *TitleGameState) Update(
-	screen *ebiten.Image, /*ebitenのscreenですが、Updateで描写するのは非推奨です*/
-	stackdeep int, delta float64,
+	stackdeep int,
 ) pgfsm.Result {
 
 	/*sキーが入力された場合*/
@@ -512,7 +502,7 @@ func (sm *TitleGameState) Update(
 
 //これはマイフレーム呼び出される描写用の関数です
 //このステートが実行されていなくても、スタック上にあれば呼び出されます
-func (sm *TitleGameState) Draw(screen *ebiten.Image, stackdeep int, delta float64) {
+func (sm *TitleGameState) Draw(screen *ebiten.Image, stackdeep int) {
 	text.Draw(screen, "Game Title\nPressing S key,start!", sm.mplusNormalFont, 100, 100, color.White)
 }
 
