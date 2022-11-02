@@ -7,9 +7,8 @@ package pgfsm
 
 import (
 	"fmt"
-	"time"
 
-	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/v2"
 )
 
 /*
@@ -80,9 +79,9 @@ The interface of state.
 ステートのインターフェース
 */
 type State interface {
-	Init(int, float64)
-	Update(*ebiten.Image, int, float64) Result
-	Draw(*ebiten.Image, int, float64)
+	Init(int)
+	Update(int) Result
+	Draw(*ebiten.Image, int)
 }
 
 /*
@@ -91,9 +90,7 @@ The struct of the stack and state machine.
 ステートスタックマシーンの構造体です
 */
 type Machine struct {
-	StateStack          []State
-	deltaTime           float64
-	oldTimeForDeltaTime int64
+	StateStack []State
 
 	/*Please set the window size here.
 	It is used in the layout function for Ebiten
@@ -106,15 +103,12 @@ type Machine struct {
 
 これは処理のため毎フレーク呼び出される関数です。内部的にEbitenで使います*/
 func (g *Machine) Update(screen *ebiten.Image) error {
-	newTimeForDeltaTime := time.Now().UnixNano()
-	g.deltaTime = float64(newTimeForDeltaTime-g.oldTimeForDeltaTime) * 0.001
-	g.oldTimeForDeltaTime = newTimeForDeltaTime
 
 	if g.Empty() {
 		return nil
 	}
 
-	res := g.StateStack[len(g.StateStack)-1].Update(screen, len(g.StateStack)-1, g.deltaTime)
+	res := g.StateStack[len(g.StateStack)-1].Update(len(g.StateStack) - 1)
 
 	switch res.Code {
 	case CodeChange:
@@ -127,7 +121,7 @@ func (g *Machine) Update(screen *ebiten.Image) error {
 		g.StateStack = []State{}
 		g.StateAdd(res.NextState)
 	case CodeInsertBack:
-		res.NextState.Init(len(g.StateStack)-1, g.deltaTime)
+		res.NextState.Init(len(g.StateStack) - 1)
 		index := len(g.StateStack) - 1
 		g.StateStack = append(g.StateStack[:index+1], g.StateStack[index:]...)
 		g.StateStack[index] = res.NextState
@@ -142,7 +136,7 @@ func (g *Machine) Update(screen *ebiten.Image) error {
 これは描写のため毎フレーク呼び出される関数です。内部的にEbitenで使います*/
 func (g *Machine) Draw(screen *ebiten.Image) {
 	for d, e := range g.StateStack {
-		e.Draw(screen, d, g.deltaTime)
+		e.Draw(screen, d)
 	}
 }
 
@@ -158,7 +152,7 @@ func (g *Machine) Empty() bool {
 stackに引数vを追加します*/
 func (g *Machine) StateAdd(v State) {
 	g.StateStack = append(g.StateStack, v)
-	v.Init(len(g.StateStack)-1, g.deltaTime)
+	v.Init(len(g.StateStack) - 1)
 }
 
 /*This changes the current running state in the stack to the argument v
@@ -166,7 +160,7 @@ func (g *Machine) StateAdd(v State) {
 実行中のステートを引数vに変更します*/
 func (g *Machine) StateChange(v State) {
 	g.StateStack[len(g.StateStack)-1] = v
-	v.Init(len(g.StateStack)-1, g.deltaTime)
+	v.Init(len(g.StateStack) - 1)
 }
 
 /*The function for debugging.It displays the all states of the stack on the console.
@@ -188,5 +182,4 @@ func (g *Machine) Layout(outsideWidth, outsideHeight int) (int, int) {
 /*This is the function for Ebiten.It is used internally.
 内部的にEbitenで使います*/
 func (g *Machine) Init() {
-	g.oldTimeForDeltaTime = time.Now().UnixNano()
 }

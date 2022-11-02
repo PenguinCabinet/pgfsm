@@ -5,7 +5,7 @@ This is the state machine library for Ebiten.
 */
 package pgfsm
 
-import "github.com/hajimehoshi/ebiten"
+import "github.com/hajimehoshi/ebiten/v2"
 
 /*
 The structure of the state for the selection scene.
@@ -129,13 +129,13 @@ func (s *SelectState) Back() {
 	}
 }
 
-func (s *SelectState) Init(StackIndex int, delta float64) {
+func (s *SelectState) Init(StackIndex int) {
 	if s.InitFunc != nil {
 		s.InitFunc()
 	}
 }
 
-func (s *SelectState) Update(screen *ebiten.Image, StackIndex int, delta float64) Result {
+func (s *SelectState) Update(StackIndex int) Result {
 	if s.PressedNextKeyFunc != nil {
 		if s.PressedNextKeyFunc() {
 			s.Next()
@@ -166,7 +166,7 @@ func (s *SelectState) Update(screen *ebiten.Image, StackIndex int, delta float64
 		NextState: nil,
 	}
 }
-func (s *SelectState) Draw(screen *ebiten.Image, StackIndex int, delta float64) {
+func (s *SelectState) Draw(screen *ebiten.Image, StackIndex int) {
 	x := s.OrignX
 	y := s.OrignY
 	for i, e := range s.DrawFuncs {

@@ -3,7 +3,7 @@ package pgfsm
 import (
 	"testing"
 
-	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -14,18 +14,16 @@ type StateForTest struct {
 
 func (sm *StateForTest) Init(
 	stackdeep int,
-	delta float64,
 ) {
 }
 
 func (sm *StateForTest) Update(
-	screen *ebiten.Image,
-	stackdeep int, delta float64,
+	stackdeep int,
 ) Result {
 	return sm.R
 }
 
-func (sm *StateForTest) Draw(screen *ebiten.Image, stackdeep int, delta float64) {
+func (sm *StateForTest) Draw(screen *ebiten.Image, stackdeep int) {
 }
 
 func TestEmptyOfMachine(t *testing.T) {
