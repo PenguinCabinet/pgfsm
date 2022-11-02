@@ -3,7 +3,7 @@ module main
 go 1.18
 
 require (
-	github.com/PenguinCabinet/pgfsm v0.0.5
+	github.com/PenguinCabinet/pgfsm v0.0.6
 	github.com/hajimehoshi/ebiten v1.12.12
 	golang.org/x/image v0.1.0
 )
