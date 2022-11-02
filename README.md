@@ -32,7 +32,7 @@ import (
 	"log"
 
 	"github.com/PenguinCabinet/pgfsm"
-	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type MyGameState struct {

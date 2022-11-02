@@ -30,8 +30,8 @@ package main
 import (
 	"log"
 
-	"github.com/PenguinCabinet/pgfsm/v2"
-	"github.com/hajimehoshi/ebiten"
+	"github.com/PenguinCabinet/pgfsm"
+	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type MyGameState struct {
