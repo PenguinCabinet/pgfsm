@@ -30,7 +30,7 @@ package main
 import (
 	"log"
 
-	"github.com/PenguinCabinet/pgfsm"
+	"github.com/PenguinCabinet/pgfsm/v2"
 	"github.com/hajimehoshi/ebiten"
 )
 
