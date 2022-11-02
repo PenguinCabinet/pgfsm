@@ -46,7 +46,7 @@ func (sm *MyGameState) Init(
 }
 
 func (sm *MyGameState) Update(
-	stackdeep int
+	stackdeep int,
 ) pgfsm.Result {
 	//Update
 	return pgfsm.Result{
