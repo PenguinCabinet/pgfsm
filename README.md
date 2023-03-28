@@ -4,7 +4,6 @@
 これは[GoのゲームライブラリEbiten用](https://ebiten.org/)のステートマシンライブラリです。
 ## 提供する機能
 * ゲームプログラミングのためのスタック型のステートマシン
-* 直前のフレームと今のフレーム間で経過した時間のdeltatime
 
 # ドキュメント
 * [チュートリアル(JP)](doc/Tutorial.md)   
@@ -40,7 +39,6 @@ type MyGameState struct {
 
 func (sm *MyGameState) Init(
 	stackdeep int, /*The index of this state.*/
-	deltatime float64, /*The deltatime between the previous frame and the current frame.*/
 ) {
 	//Init
 }
