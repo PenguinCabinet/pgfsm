@@ -4,7 +4,6 @@
 This is the state machine library for [Ebiten](https://ebiten.org/).
 ## Provide features
 * The state and stack machine for the game programming
-* The deltatime between the previous frame and the current frame.
 
 # Documents
 * [Tutorial](doc/Tutorial_en.md) 
