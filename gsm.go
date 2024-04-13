@@ -102,7 +102,7 @@ type Machine struct {
 /*This is the function for processing that is called in every frames.It is used internally.
 
 これは処理のため毎フレーク呼び出される関数です。内部的にEbitenで使います*/
-func (g *Machine) Update(screen *ebiten.Image) error {
+func (g *Machine) Update() error {
 
 	if g.Empty() {
 		return nil

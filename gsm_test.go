@@ -45,7 +45,7 @@ func TestCodeNilOfMachine(t *testing.T) {
 	})
 	assert.Equal(t, gms.StateStack[0].(*StateForTest).ID, "State1", "Check the id of the current state")
 	//continue one frame.
-	_ = gms.Update(nil)
+	_ = gms.Update()
 	assert.Equal(t, gms.StateStack[0].(*StateForTest).ID, "State1", "Check the id of the current state")
 }
 
@@ -65,7 +65,7 @@ func TestCodeChangeOfMachine(t *testing.T) {
 	})
 	assert.Equal(t, gms.StateStack[0].(*StateForTest).ID, "State1", "Check the id of the current state")
 	//continue one frame.
-	_ = gms.Update(nil)
+	_ = gms.Update()
 	assert.Equal(t, gms.StateStack[0].(*StateForTest).ID, "State2", "Check the id of the current state")
 }
 
@@ -87,7 +87,7 @@ func TestCodeAddOfMachine(t *testing.T) {
 	assert.Equal(t, len(gms.StateStack), 1, "Check the length of the states")
 	assert.Equal(t, gms.StateStack[0].(*StateForTest).ID, "State1", "Check the id of the state[0]")
 	//continue one frame.
-	_ = gms.Update(nil)
+	_ = gms.Update()
 	assert.Equal(t, len(gms.StateStack), 2, "Check the length of the states")
 	assert.Equal(t, gms.StateStack[0].(*StateForTest).ID, "State1", "Check the id of the state[0]")
 	assert.Equal(t, gms.StateStack[1].(*StateForTest).ID, "State2", "Check the id of the state[1]")
@@ -107,7 +107,7 @@ func TestCodeDeleteOfMachine(t *testing.T) {
 	assert.Equal(t, gms.Empty(), false, "Run Empty func when not empty.")
 	assert.Equal(t, gms.StateStack[0].(*StateForTest).ID, "State1", "Check the id of the current state")
 	//continue one frame.
-	_ = gms.Update(nil)
+	_ = gms.Update()
 	assert.Equal(t, gms.Empty(), true, "Run Empty func when empty.")
 }
 
@@ -141,7 +141,7 @@ func TestCodeAllDeleteAndChangeOfMachine(t *testing.T) {
 
 	assert.Equal(t, len(gms.StateStack), 4, "Check the length of the states")
 	//continue one frame.
-	_ = gms.Update(nil)
+	_ = gms.Update()
 	assert.Equal(t, len(gms.StateStack), 1, "Check the length of the states")
 	assert.Equal(t, gms.StateStack[0].(*StateForTest).ID, "State5", "Check the id of the current state")
 }
@@ -164,7 +164,7 @@ func TestCodeInsertBackOfMachine(t *testing.T) {
 	assert.Equal(t, len(gms.StateStack), 1, "Check the length of the states")
 	assert.Equal(t, gms.StateStack[0].(*StateForTest).ID, "State1", "Check the id of the state[0]")
 	//continue one frame.
-	_ = gms.Update(nil)
+	_ = gms.Update()
 	assert.Equal(t, len(gms.StateStack), 2, "Check the length of the states")
 	assert.Equal(t, gms.StateStack[0].(*StateForTest).ID, "State2", "Check the id of the state[0]")
 	assert.Equal(t, gms.StateStack[1].(*StateForTest).ID, "State1", "Check the id of the state[1]")
@@ -190,7 +190,7 @@ func TestCodeInsertBackOfMachine(t *testing.T) {
 	assert.Equal(t, gms.StateStack[0].(*StateForTest).ID, "State1", "Check the id of the state[0]")
 	assert.Equal(t, gms.StateStack[1].(*StateForTest).ID, "State2", "Check the id of the state[1]")
 	//continue one frame.
-	_ = gms.Update(nil)
+	_ = gms.Update()
 	assert.Equal(t, len(gms.StateStack), 3, "Check the length of the states")
 	assert.Equal(t, gms.StateStack[0].(*StateForTest).ID, "State1", "Check the id of the state[0]")
 	assert.Equal(t, gms.StateStack[1].(*StateForTest).ID, "State3", "Check the id of the state[1]")
